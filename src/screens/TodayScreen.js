@@ -1,14 +1,14 @@
 // ─── TodayScreen — Shelter Dashboard ─────────────────────────────────────────
 // The operational heartbeat of the shelter. Shows today's alerts, stats, and tasks.
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  StatusBar, RefreshControl, Image,
+  StatusBar, RefreshControl, Image, Modal, FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
-import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
+import { signOut } from 'aws-amplify/auth';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS, SPACING, RADIUS, SHADOW } from '../theme/colors';
 import { listAnimals, getAnimalStats } from '../services/animalService';
@@ -25,6 +25,11 @@ const greetingText = () => {
   if (h < 12) return 'Good morning';
   if (h < 17) return 'Good afternoon';
   return 'Good evening';
+};
+
+const SPECIES_ICON = {
+  dog: 'dog', cat: 'cat', cow: 'cow', buffalo: 'cow',
+  bird: 'bird', rabbit: 'rabbit', horse: 'horse-variant', other: 'paw',
 };
 
 // ── Stat Card ─────────────────────────────────────────────────────────────────
@@ -84,25 +89,93 @@ const SectionHeader = ({ title, count, action, onAction }) => (
   </View>
 );
 
+// ── Animal Picker Modal ────────────────────────────────────────────────────────
+const AnimalPickerModal = ({ visible, animals, onSelect, onClose }) => (
+  <Modal
+    visible={visible}
+    transparent
+    animationType="slide"
+    onRequestClose={onClose}
+  >
+    <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={onClose} />
+    <View style={styles.modalSheet}>
+      <View style={styles.modalHandle} />
+      <Text style={styles.modalTitle}>Select Animal to Scan</Text>
+      <Text style={styles.modalSubtitle}>The scan will be saved to this animal's history</Text>
+
+      {animals.length === 0 ? (
+        <View style={styles.modalEmpty}>
+          <Icon name="paw-outline" size={36} color={COLORS.border} />
+          <Text style={styles.modalEmptyText}>No animals in shelter yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={animals}
+          keyExtractor={a => a.id}
+          style={styles.modalList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.animalRow}
+              onPress={() => onSelect(item)}
+              activeOpacity={0.75}
+            >
+              <View style={styles.animalRowIcon}>
+                <Icon
+                  name={SPECIES_ICON[item.species] || 'paw'}
+                  size={20}
+                  color={COLORS.brand}
+                />
+              </View>
+              <View style={styles.animalRowInfo}>
+                <Text style={styles.animalRowName}>{item.name || 'Unknown Animal'}</Text>
+                <Text style={styles.animalRowMeta}>{item.caseId} · {item.species}</Text>
+              </View>
+              <View style={[
+                styles.animalRowHealth,
+                { backgroundColor: item.healthStatus === 'critical' ? COLORS.criticalBg : item.healthStatus === 'needs_attention' ? COLORS.attentionBg : COLORS.healthyBg }
+              ]}>
+                <Text style={[
+                  styles.animalRowHealthText,
+                  { color: item.healthStatus === 'critical' ? COLORS.critical : item.healthStatus === 'needs_attention' ? COLORS.attention : COLORS.healthy }
+                ]}>
+                  {(item.healthStatus || 'stable').replace(/_/g, ' ')}
+                </Text>
+              </View>
+              <Icon name="chevron-right" size={16} color={COLORS.textMuted} />
+            </TouchableOpacity>
+          )}
+        />
+      )}
+
+      <TouchableOpacity style={styles.modalCancel} onPress={onClose}>
+        <Text style={styles.modalCancelText}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  </Modal>
+);
+
 // ── Main Screen ────────────────────────────────────────────────────────────────
 const TodayScreen = ({ navigation }) => {
-  const [orgName, setOrgName]       = useState('Your Shelter');
-  const [stats, setStats]           = useState({ total: 0, critical: 0, available: 0, needsAttention: 0 });
+  const [orgName, setOrgName]           = useState('Your Shelter');
+  const [stats, setStats]               = useState({ total: 0, critical: 0, available: 0, needsAttention: 0 });
   const [alertAnimals, setAlertAnimals] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading]       = useState(true);
+  const [allAnimals, setAllAnimals]     = useState([]);
+  const [refreshing, setRefreshing]     = useState(false);
+  const [loading, setLoading]           = useState(true);
+  const [scanPickerVisible, setScanPickerVisible] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
-      const [org, statsData, allAnimals] = await Promise.all([
+      const [org, statsData, animals] = await Promise.all([
         getOrganization(),
         getAnimalStats(),
         listAnimals(),
       ]);
       if (org?.name) setOrgName(org.name);
       setStats(statsData);
+      setAllAnimals(animals);
       setAlertAnimals(
-        allAnimals.filter(a => a.healthStatus === 'critical' || a.healthStatus === 'needs_attention'),
+        animals.filter(a => a.healthStatus === 'critical' || a.healthStatus === 'needs_attention'),
       );
     } catch (e) {
       console.warn('TodayScreen load error:', e);
@@ -115,18 +188,27 @@ const TodayScreen = ({ navigation }) => {
   useFocusEffect(useCallback(() => { loadData(); }, [loadData]));
 
   const handleLogout = async () => {
-    try {
-      await signOut();
-    } catch (e) {
-      console.warn('Logout error', e);
-    }
+    try { await signOut(); } catch (e) { console.warn('Logout error', e); }
   };
 
   const onRefresh = () => { setRefreshing(true); loadData(); };
 
+  const handleAnimalSelected = (animal) => {
+    setScanPickerVisible(false);
+    navigation.navigate('Scan', { animalId: animal.id });
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+
+      {/* ── Animal Picker Modal ─────────────────────────────────────────── */}
+      <AnimalPickerModal
+        visible={scanPickerVisible}
+        animals={allAnimals}
+        onSelect={handleAnimalSelected}
+        onClose={() => setScanPickerVisible(false)}
+      />
 
       <ScrollView
         style={styles.scroll}
@@ -172,7 +254,7 @@ const TodayScreen = ({ navigation }) => {
           <QuickAction
             icon="camera"       label="AI Scan"
             color="#7C3AED"         bg="#EDE9FE"
-            onPress={() => navigation.navigate('Scan')}
+            onPress={() => setScanPickerVisible(true)}
           />
           <QuickAction
             icon="pill"         label="Medications"
@@ -245,20 +327,8 @@ const styles = StyleSheet.create({
   logo:         { width: 52, height: 52, borderRadius: RADIUS.md },
 
   // Stats
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: SPACING.sm,
-    marginBottom: SPACING.lg,
-  },
-  statCard: {
-    flex: 1,
-    minWidth: '45%',
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
-    alignItems: 'flex-start',
-    gap: 4,
-  },
+  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm, marginBottom: SPACING.lg },
+  statCard:  { flex: 1, minWidth: '45%', borderRadius: RADIUS.lg, padding: SPACING.md, alignItems: 'flex-start', gap: 4 },
   statValue: { fontSize: 28, fontWeight: '800' },
   statLabel: { fontSize: 11, color: COLORS.textSecondary, fontWeight: '600' },
 
@@ -277,13 +347,9 @@ const styles = StyleSheet.create({
 
   // Alert cards
   alertCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.md,
-    padding: SPACING.md,
-    marginBottom: SPACING.sm,
-    borderLeftWidth: 3,
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: COLORS.surface, borderRadius: RADIUS.md,
+    padding: SPACING.md, marginBottom: SPACING.sm, borderLeftWidth: 3,
     ...SHADOW.card,
   },
   alertDot:  { width: 8, height: 8, borderRadius: 4, marginRight: SPACING.sm },
@@ -297,6 +363,31 @@ const styles = StyleSheet.create({
   emptySub:        { fontSize: 13, color: COLORS.textSecondary, textAlign: 'center', paddingHorizontal: SPACING.lg },
   emptyButton:     { flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, backgroundColor: COLORS.brand, paddingHorizontal: SPACING.lg, paddingVertical: SPACING.sm, borderRadius: RADIUS.lg, marginTop: SPACING.sm },
   emptyButtonText: { color: COLORS.textOnBrand, fontWeight: '700', fontSize: 14 },
+
+  // Animal Picker Modal
+  modalOverlay:   { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' },
+  modalSheet:     {
+    backgroundColor: COLORS.background, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+    paddingHorizontal: SPACING.md, paddingBottom: SPACING.xl, maxHeight: '75%',
+  },
+  modalHandle:    { width: 40, height: 4, borderRadius: 2, backgroundColor: COLORS.border, alignSelf: 'center', marginVertical: SPACING.sm },
+  modalTitle:     { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary, marginTop: SPACING.sm },
+  modalSubtitle:  { fontSize: 13, color: COLORS.textSecondary, marginTop: 4, marginBottom: SPACING.md },
+  modalList:      { maxHeight: 380 },
+  modalEmpty:     { alignItems: 'center', paddingVertical: SPACING.xl, gap: SPACING.sm },
+  modalEmptyText: { fontSize: 14, color: COLORS.textSecondary },
+  modalCancel:    { marginTop: SPACING.md, alignItems: 'center', paddingVertical: SPACING.sm },
+  modalCancelText:{ fontSize: 15, color: COLORS.textSecondary, fontWeight: '600' },
+
+  // Animal row in picker
+  animalRow:           { flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, paddingVertical: SPACING.sm, borderBottomWidth: 1, borderBottomColor: COLORS.border },
+  animalRowIcon:       { width: 40, height: 40, borderRadius: RADIUS.md, backgroundColor: COLORS.brandLight, alignItems: 'center', justifyContent: 'center' },
+  animalRowInfo:       { flex: 1 },
+  animalRowName:       { fontSize: 14, fontWeight: '700', color: COLORS.textPrimary },
+  animalRowMeta:       { fontSize: 12, color: COLORS.textMuted, marginTop: 2 },
+  animalRowHealth:     { paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.full },
+  animalRowHealthText: { fontSize: 10, fontWeight: '700' },
 });
 
 export default TodayScreen;
+
