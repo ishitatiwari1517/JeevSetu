@@ -43,3 +43,8 @@ export const recordScan = async (input: RecordScanInput): Promise<Scan> => {
   const userId = await resolveUserId();
   return storage.record(userId, input);
 };
+
+export const listScansByAnimal = async (animalId: string): Promise<Scan[]> => {
+  const all = await listScans();
+  return all.filter(s => s.animalId === animalId);
+};

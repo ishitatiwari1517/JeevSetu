@@ -55,7 +55,8 @@ const QUALITY_TONE = {
 
 let nextAssetId = 0;
 
-const MultiImageCaptureScreen = ({ navigation }) => {
+const MultiImageCaptureScreen = ({ navigation, route }) => {
+  const { animalId } = route?.params ?? {};
   const [assets, setAssets] = useState([]);
 
   const confidence = useMemo(() => computeConfidence(assets), [assets]);
@@ -108,7 +109,7 @@ const MultiImageCaptureScreen = ({ navigation }) => {
 
   const handleRunScan = () => {
     if (!canRunScan) return;
-    navigation.navigate('ScanProcessing', { assets });
+    navigation.navigate('ScanProcessing', { assets, animalId });
   };
 
   return (

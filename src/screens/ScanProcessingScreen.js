@@ -10,12 +10,11 @@ import {
 } from './scanProgress';
 import { runMultiImageScan, ScanError } from '../services/aiScan';
 import { recordScan } from '../services/scanHistoryService';
-import { listPets } from '../services/petService';
 
 const TICK_MS = 100;
 
 const ScanProcessingScreen = ({ navigation, route }) => {
-  const { assets } = route?.params ?? { assets: [] };
+  const { assets, animalId } = route?.params ?? { assets: [] };
   const startedAtRef = useRef(Date.now());
   const scanResultRef = useRef(null);
 
@@ -62,12 +61,11 @@ const ScanProcessingScreen = ({ navigation, route }) => {
       // Best-effort persist. A storage failure should not block the user from
       // seeing the result they just paid wait time for.
       try {
-        const pets = await listPets();
         await recordScan({
           result,
           heroUri,
           imageCount: assets.length,
-          petId: pets[0]?.id,
+          animalId: animalId || undefined,
         });
       } catch (e) {
         console.warn('[scanHistory] failed to persist scan:', e?.message);

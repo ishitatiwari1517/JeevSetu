@@ -14,6 +14,8 @@ import { getAnimal, updateAnimal } from '../services/animalService';
 import { listMedicalRecords } from '../services/medicalRecordService';
 import { listAnimalEvents } from '../services/animalEventService';
 import { getOrganization } from '../services/orgService';
+import { listScansByAnimal } from '../services/scanHistoryService';
+import { STATUS_BANNER } from '../services/scanResult';
 import StatusChip from '../components/StatusChip';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -103,7 +105,7 @@ const EventRow = ({ event }) => {
 };
 
 // ── Tab bar ───────────────────────────────────────────────────────────────────
-const TABS = ['Overview', 'Medical', 'Timeline', 'Adoption'];
+const TABS = ['Overview', 'Medical', 'Scans', 'Timeline', 'Adoption'];
 
 const TabBar = ({ active, onSelect }) => (
   <View style={styles.tabBar}>
@@ -210,6 +212,63 @@ const TimelineTab = ({ events }) => (
   </ScrollView>
 );
 
+// ── Scans Tab ─────────────────────────────────────────────────────────────────
+const ScanHistoryCard = ({ scan, onPress }) => {
+  const banner = STATUS_BANNER[scan.result?.overallStatus] ?? STATUS_BANNER.NEEDS_ATTENTION;
+  const date = scan.createdAt
+    ? new Date(scan.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '—';
+  const time = scan.createdAt
+    ? new Date(scan.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
+    : '';
+  return (
+    <TouchableOpacity style={styles.scanCard} onPress={onPress} activeOpacity={0.8}>
+      {scan.heroUri ? (
+        <Image source={{ uri: scan.heroUri }} style={styles.scanThumb} />
+      ) : (
+        <View style={[styles.scanThumb, styles.scanThumbPlaceholder]}>
+          <Icon name="brain" size={20} color={COLORS.brand} />
+        </View>
+      )}
+      <View style={styles.scanCardInfo}>
+        <View style={[styles.scanStatusPill, { backgroundColor: banner.tone }]}>
+          <Text style={styles.scanStatusText}>{banner.label}</Text>
+        </View>
+        <Text style={styles.scanDate}>{date} · {time}</Text>
+        <Text style={styles.scanMeta}>{scan.imageCount} image{scan.imageCount === 1 ? '' : 's'} analyzed</Text>
+      </View>
+      <Icon name="chevron-right" size={18} color={COLORS.textMuted} />
+    </TouchableOpacity>
+  );
+};
+
+const ScansTab = ({ scans, onScanPress, onRunScan }) => (
+  <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.tabContent} showsVerticalScrollIndicator={false}>
+    <TouchableOpacity style={styles.addBtn} onPress={onRunScan}>
+      <Icon name="camera" size={16} color={COLORS.brand} />
+      <Text style={styles.addBtnText}>Run New AI Scan</Text>
+    </TouchableOpacity>
+
+    {scans.length === 0 ? (
+      <View style={styles.tabEmpty}>
+        <Icon name="brain" size={40} color={COLORS.border} />
+        <Text style={styles.tabEmptyText}>No scans yet</Text>
+        <Text style={styles.tabEmptySubText}>Run an AI health scan to see results here.</Text>
+      </View>
+    ) : (
+      <View style={styles.sectionCard}>
+        <Text style={styles.sectionCardTitle}>Scan History ({scans.length})</Text>
+        {scans.map((s, i) => (
+          <View key={s.id}>
+            <ScanHistoryCard scan={s} onPress={() => onScanPress(s)} />
+            {i < scans.length - 1 && <View style={styles.divider} />}
+          </View>
+        ))}
+      </View>
+    )}
+  </ScrollView>
+);
+
 // ── Adoption Tab ──────────────────────────────────────────────────────────────
 const AdoptionTab = ({ animal, onToggleReady, onViewProfile }) => (
   <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.tabContent} showsVerticalScrollIndicator={false}>
@@ -274,6 +333,7 @@ const AnimalDetailScreen = ({ route, navigation }) => {
   const [animal, setAnimal]   = useState(null);
   const [records, setRecords] = useState([]);
   const [events, setEvents]   = useState([]);
+  const [scans, setScans]     = useState([]);
   const [activeTab, setTab]   = useState('Overview');
   const [refreshing, setRefreshing] = useState(false);
   const [orgId, setOrgId]     = useState(null);
@@ -288,12 +348,14 @@ const AnimalDetailScreen = ({ route, navigation }) => {
       setOrgId(oid);
       setAnimal(animalData);
       if (animalData) {
-        const [recs, evts] = await Promise.all([
+        const [recs, evts, scanList] = await Promise.all([
           listMedicalRecords(oid, animalId),
           listAnimalEvents(oid, animalId),
+          listScansByAnimal(animalId).catch(() => []),
         ]);
         setRecords(recs);
         setEvents(evts);
+        setScans(scanList);
       }
     } catch (e) {
       console.warn('AnimalDetail load error:', e);
@@ -377,6 +439,18 @@ const AnimalDetailScreen = ({ route, navigation }) => {
               animalId: animal.id,
               animalName: animal.name || 'Unknown',
               animalCaseId: animal.caseId,
+            })}
+          />
+        )}
+        {activeTab === 'Scans' && (
+          <ScansTab
+            scans={scans}
+            onRunScan={() => navigation.navigate('Scan', { animalId: animal.id })}
+            onScanPress={(scan) => navigation.navigate('ScanResult', {
+              result: scan.result,
+              heroUri: scan.heroUri,
+              imageCount: scan.imageCount,
+              totalImageCount: scan.imageCount,
             })}
           />
         )}
@@ -499,6 +573,16 @@ const styles = StyleSheet.create({
   qrProfileIcon: { width: 42, height: 42, borderRadius: RADIUS.md, backgroundColor: COLORS.brandLight, alignItems: 'center', justifyContent: 'center' },
   qrProfileBtnTitle: { fontSize: 14, fontWeight: '700', color: COLORS.textPrimary },
   qrProfileBtnSub: { fontSize: 12, color: COLORS.textSecondary, marginTop: 2 },
+
+  // Scan history card
+  scanCard: { flexDirection: 'row', alignItems: 'center', gap: SPACING.md, paddingVertical: SPACING.sm },
+  scanThumb: { width: 52, height: 52, borderRadius: RADIUS.md, backgroundColor: COLORS.inputBackground },
+  scanThumbPlaceholder: { alignItems: 'center', justifyContent: 'center' },
+  scanCardInfo: { flex: 1 },
+  scanStatusPill: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, marginBottom: 4 },
+  scanStatusText: { fontSize: 10, fontWeight: '700', color: COLORS.white, letterSpacing: 0.4 },
+  scanDate: { fontSize: 13, fontWeight: '600', color: COLORS.textPrimary },
+  scanMeta: { fontSize: 11, color: COLORS.textMuted, marginTop: 2 },
 });
 
 export default AnimalDetailScreen;
