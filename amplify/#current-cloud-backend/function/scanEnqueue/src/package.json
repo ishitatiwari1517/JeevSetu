@@ -1,0 +1,13 @@
+{
+  "name": "scanEnqueue",
+  "version": "1.0.0",
+  "description": "PetVue scan pipeline — verifies S3 uploads completed and enqueues SQS message for the worker.",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/client-s3": "^3.658.0",
+    "@aws-sdk/client-sqs": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0"
+  }
+}

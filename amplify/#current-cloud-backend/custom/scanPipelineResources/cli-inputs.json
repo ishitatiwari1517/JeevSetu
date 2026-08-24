@@ -1,0 +1,5 @@
+{
+  "service": "customCloudformation",
+  "providerPlugin": "awscloudformation",
+  "dependsOn": []
+}

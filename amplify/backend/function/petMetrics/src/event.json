@@ -1,0 +1,7 @@
+{
+  "httpMethod": "POST",
+  "resource": "/pets/{petId}/weights",
+  "pathParameters": { "petId": "pet-123" },
+  "requestContext": { "authorizer": { "claims": { "sub": "user-abc" } } },
+  "body": "{\"weightKg\":12.4,\"loggedAt\":\"2026-05-10T10:00:00Z\"}"
+}

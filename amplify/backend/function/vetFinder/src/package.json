@@ -1,0 +1,12 @@
+{
+  "name": "vetFinder",
+  "version": "1.0.0",
+  "description": "PetVue Google Places (v1) proxy for nearby vets with DynamoDB cache",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/client-ssm": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0"
+  }
+}

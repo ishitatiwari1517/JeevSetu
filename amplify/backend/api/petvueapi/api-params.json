@@ -1,0 +1,117 @@
+{
+  "paths": [
+    {
+      "name": "/scan",
+      "lambdaFunction": "aiScan",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/scan"
+    },
+    {
+      "name": "/intake",
+      "lambdaFunction": "intakeSubmit",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/intake"
+    },
+    {
+      "name": "/vets/nearby",
+      "lambdaFunction": "vetFinder",
+      "privacy": { "open": true },
+      "policyResourceName": "/vets/nearby"
+    },
+    {
+      "name": "/vets/{placeId}",
+      "lambdaFunction": "vetFinder",
+      "privacy": { "open": true },
+      "policyResourceName": "/vets/{placeId}"
+    },
+    {
+      "name": "/pets/{petId}/vaccinations",
+      "lambdaFunction": "vaccinationRecord",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/vaccinations"
+    },
+    {
+      "name": "/pets/{petId}/vaccinations/{vaccinationId}",
+      "lambdaFunction": "vaccinationRecord",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/vaccinations/{vaccinationId}"
+    },
+    {
+      "name": "/bookings",
+      "lambdaFunction": "bookingRecord",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/bookings"
+    },
+    {
+      "name": "/bookings/{bookingId}",
+      "lambdaFunction": "bookingRecord",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/bookings/{bookingId}"
+    },
+    {
+      "name": "/pets/{petId}/weights",
+      "lambdaFunction": "petMetrics",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/weights"
+    },
+    {
+      "name": "/pets/{petId}/weights/{weightLogId}",
+      "lambdaFunction": "petMetrics",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/weights/{weightLogId}"
+    },
+    {
+      "name": "/pets/{petId}/activities",
+      "lambdaFunction": "petMetrics",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/activities"
+    },
+    {
+      "name": "/pets/{petId}/activities/{activityLogId}",
+      "lambdaFunction": "petMetrics",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/pets/{petId}/activities/{activityLogId}"
+    }
+  ],
+  "resourceName": "petvueapi",
+  "functionArns": [
+    {
+      "lambdaFunction": "aiScan"
+    },
+    {
+      "lambdaFunction": "intakeSubmit"
+    },
+    {
+      "lambdaFunction": "vetFinder"
+    },
+    {
+      "lambdaFunction": "vaccinationRecord"
+    },
+    {
+      "lambdaFunction": "bookingRecord"
+    },
+    {
+      "lambdaFunction": "petMetrics"
+    }
+  ]
+}

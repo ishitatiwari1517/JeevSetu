@@ -1,0 +1,11 @@
+{
+  "name": "aiScan",
+  "version": "1.0.0",
+  "description": "PetVue veterinary triage Lambda — invokes Anthropic Claude on a pet photo and returns a structured triage result.",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "@aws-sdk/client-ssm": "^3.658.0"
+  }
+}

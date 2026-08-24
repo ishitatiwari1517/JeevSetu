@@ -1,0 +1,11 @@
+{
+  "name": "vaccinationRecord",
+  "version": "1.0.0",
+  "description": "PetVue vaccination record CRUD handler",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0"
+  }
+}

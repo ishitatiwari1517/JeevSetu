@@ -1,0 +1,66 @@
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'PetApp' do
+  config = use_native_modules!
+
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'RecaptchaInterop', :modular_headers => true
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+    # Fix non-modular include warnings (Xcode strict enforcement) — must be AFTER react_native_post_install
+    installer.pods_project.targets.each do |target|
+      # Fix duplicate symbols: both AmplifyRTNCore and RNAWSCognito bundle
+      # JKBigInteger.m / JKBigDecimal.m. Remove them from RNAWSCognito's
+      # compile sources so only AmplifyRTNCore provides the symbols.
+      if target.name == 'RNAWSCognito'
+        files_to_remove = target.source_build_phase.files.select do |file|
+          file.file_ref &&
+            file.file_ref.path &&
+            (file.file_ref.path.include?('JKBigInteger') || file.file_ref.path.include?('JKBigDecimal'))
+        end
+        files_to_remove.each do |file|
+          target.source_build_phase.remove_build_file(file)
+        end
+      end
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'NO'
+        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+        config.build_settings['DEFINES_MODULE'] = 'NO' if ['AppAuth', 'AppCheckCore', 'GTMAppAuth', 'GTMSessionFetcher'].include?(target.name)
+        
+        # Strip the -Werror=non-modular flag if present in OTHER_CFLAGS
+        cflags = config.build_settings['OTHER_CFLAGS']
+        if cflags.is_a?(String)
+          config.build_settings['OTHER_CFLAGS'] = cflags.gsub('-Werror=non-modular-include-in-framework-module', '')
+        elsif cflags.is_a?(Array)
+          config.build_settings['OTHER_CFLAGS'] = cflags.reject { |f| f == '-Werror=non-modular-include-in-framework-module' }
+        end
+      end
+    end
+  end
+end

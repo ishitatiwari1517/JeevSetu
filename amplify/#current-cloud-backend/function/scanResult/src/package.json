@@ -1,0 +1,11 @@
+{
+  "name": "scanResult",
+  "version": "1.0.0",
+  "description": "PetVue scan pipeline — polled GET endpoint that returns the current scan status and (when ready) the aggregated result.",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0"
+  }
+}

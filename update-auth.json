@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "serviceName": "Cognito",
+    "userPoolConfiguration": {
+      "oAuth": {
+        "domainPrefix": "petvueauth-1",
+        "redirectSignIns": ["petvue://"],
+        "redirectSignOuts": ["petvue://"],
+        "oAuthFlowType": "code",
+        "oAuthScopes": ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
+      }
+    }
+  }
+}

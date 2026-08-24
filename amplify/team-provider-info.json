@@ -1,0 +1,68 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-petapp-dev-5f3d2-authRole",
+      "UnauthRoleArn": "arn:aws:iam::349352224367:role/amplify-petapp-dev-5f3d2-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::349352224367:role/amplify-petapp-dev-5f3d2-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+      "UnauthRoleName": "amplify-petapp-dev-5f3d2-unauthRole",
+      "StackName": "amplify-petapp-dev-5f3d2",
+      "StackId": "arn:aws:cloudformation:ap-south-1:349352224367:stack/amplify-petapp-dev-5f3d2/09833100-415e-11f1-9e4f-02459b77d5a7",
+      "AmplifyAppId": "d1f2tgd7unccl5"
+    },
+    "categories": {
+      "auth": {
+        "petvueauth": {}
+      },
+      "function": {
+        "aiScan": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/aiScan-312b4770436968306a4b-build.zip",
+          "secretsPathAmplifyAppId": "d1f2tgd7unccl5",
+          "modelId": "claude-haiku-4-5"
+        },
+        "scanInitiate": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/scanInitiate-4f556b4f6e3173314332-build.zip"
+        },
+        "scanEnqueue": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/scanEnqueue-6769455a4b6a796f4b57-build.zip"
+        },
+        "scanWorker": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "secretsPathAmplifyAppId": "d1f2tgd7unccl5",
+          "modelId": "claude-haiku-4-5",
+          "s3Key": "amplify-builds/scanWorker-5953486a4d4d39346941-build.zip"
+        },
+        "scanResult": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/scanResult-324c5365594864367550-build.zip"
+        },
+        "intakeSubmit": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/intakeSubmit-505937576d527a76586e-build.zip"
+        },
+        "vaccinationRecord": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/vaccinationRecord-65495037774c49676554-build.zip"
+        },
+        "bookingRecord": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/bookingRecord-59334459743933664b73-build.zip"
+        },
+        "petMetrics": {
+          "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+          "s3Key": "amplify-builds/petMetrics-653378662b4c63733956-build.zip"
+        }
+      },
+      "custom": {
+        "scanPipelineResources": {}
+      },
+      "api": {
+        "petvueapi": {}
+      }
+    }
+  }
+}

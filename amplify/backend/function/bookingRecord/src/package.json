@@ -1,0 +1,11 @@
+{
+  "name": "bookingRecord",
+  "version": "1.0.0",
+  "description": "PetVue booking CRUD handler with status state machine",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/lib-dynamodb": "^3.658.0"
+  }
+}

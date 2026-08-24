@@ -1,0 +1,12 @@
+{
+  "lambdaLayers": [],
+  "secretNames": [
+    "ANTHROPIC_API_KEY"
+  ],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "modelId",
+      "environmentVariableName": "MODEL_ID"
+    }
+  ]
+}

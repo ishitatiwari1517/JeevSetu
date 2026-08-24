@@ -1,0 +1,764 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"14.3.0\",\"stackType\":\"custom-customCloudformation\",\"metadata\":{\"whyContinueWithGen1\":\"Prefer not to answer\"}}",
+  "Parameters": {
+    "env": {
+      "Type": "String"
+    }
+  },
+  "Conditions": {
+    "ShouldNotCreateEnvResources": {
+      "Fn::Equals": [
+        {
+          "Ref": "env"
+        },
+        "NONE"
+      ]
+    }
+  },
+  "Resources": {
+    "ScanBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            {
+              "Fn::Sub": "petvue-scans-${AWS::AccountId}"
+            },
+            {
+              "Fn::Sub": "petvue-scans-${AWS::AccountId}-${env}"
+            }
+          ]
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ],
+              "ExposedHeaders": [
+                "ETag"
+              ],
+              "MaxAge": 3000
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Id": "expire-after-90-days",
+              "Status": "Enabled",
+              "ExpirationInDays": 90
+            }
+          ]
+        }
+      }
+    },
+    "ScanDeadLetterQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-scan-queue-dlq",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-scan-queue-dlq",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "MessageRetentionPeriod": 1209600
+      }
+    },
+    "ScanQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-scan-queue",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-scan-queue",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "VisibilityTimeout": 180,
+        "MessageRetentionPeriod": 86400,
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "ScanDeadLetterQueue",
+              "Arn"
+            ]
+          },
+          "maxReceiveCount": 3
+        }
+      }
+    },
+    "ScansTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-scans",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-scans",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "scanId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "scanId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "IntakeFormsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-intake-forms",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-intake-forms",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "intakeId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "intakeId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "VaccinationsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-vaccinations",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-vaccinations",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "vaccinationId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "petId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "dueDate",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "vaccinationId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byPet",
+            "KeySchema": [
+              {
+                "AttributeName": "petId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "dueDate",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "BookingsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-bookings",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-bookings",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "bookingId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "petId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "scheduledAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "bookingId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "scheduledAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "byPet",
+            "KeySchema": [
+              {
+                "AttributeName": "petId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "scheduledAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "WeightLogsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-weight-logs",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-weight-logs",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "weightLogId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "petId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "loggedAt",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "weightLogId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byPet",
+            "KeySchema": [
+              {
+                "AttributeName": "petId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "loggedAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "ActivityLogsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-activity-logs",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-activity-logs",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "activityLogId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "petId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "loggedAt",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "activityLogId",
+            "KeyType": "HASH"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "byPet",
+            "KeySchema": [
+              {
+                "AttributeName": "petId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "loggedAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "byUser",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "VetCacheTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "petvue-vet-cache",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "petvue-vet-cache",
+                  { "Ref": "env" }
+                ]
+              ]
+            }
+          ]
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          { "AttributeName": "cacheKey", "AttributeType": "S" }
+        ],
+        "KeySchema": [
+          { "AttributeName": "cacheKey", "KeyType": "HASH" }
+        ],
+        "TimeToLiveSpecification": {
+          "AttributeName": "expiresAt",
+          "Enabled": true
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ScanBucketName": {
+      "Value": {
+        "Ref": "ScanBucket"
+      }
+    },
+    "ScanBucketArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ScanBucket",
+          "Arn"
+        ]
+      }
+    },
+    "ScanQueueUrl": {
+      "Value": {
+        "Ref": "ScanQueue"
+      }
+    },
+    "ScanQueueArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ScanQueue",
+          "Arn"
+        ]
+      }
+    },
+    "ScansTableName": {
+      "Value": {
+        "Ref": "ScansTable"
+      }
+    },
+    "ScansTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ScansTable",
+          "Arn"
+        ]
+      }
+    },
+    "IntakeFormsTableName": {
+      "Value": {
+        "Ref": "IntakeFormsTable"
+      }
+    },
+    "IntakeFormsTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "IntakeFormsTable",
+          "Arn"
+        ]
+      }
+    },
+    "VaccinationsTableName": {
+      "Value": {
+        "Ref": "VaccinationsTable"
+      }
+    },
+    "VaccinationsTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "VaccinationsTable",
+          "Arn"
+        ]
+      }
+    },
+    "BookingsTableName": {
+      "Value": {
+        "Ref": "BookingsTable"
+      }
+    },
+    "BookingsTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "BookingsTable",
+          "Arn"
+        ]
+      }
+    },
+    "WeightLogsTableName": {
+      "Value": {
+        "Ref": "WeightLogsTable"
+      }
+    },
+    "WeightLogsTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WeightLogsTable",
+          "Arn"
+        ]
+      }
+    },
+    "ActivityLogsTableName": {
+      "Value": {
+        "Ref": "ActivityLogsTable"
+      }
+    },
+    "ActivityLogsTableArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ActivityLogsTable",
+          "Arn"
+        ]
+      }
+    },
+    "VetCacheTableName": {
+      "Value": { "Ref": "VetCacheTable" }
+    },
+    "VetCacheTableArn": {
+      "Value": { "Fn::GetAtt": ["VetCacheTable", "Arn"] }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "httpMethod": "POST",
+  "pathParameters": { "petId": "pet-123" },
+  "requestContext": { "authorizer": { "claims": { "sub": "user-abc" } } },
+  "body": "{\"vaccineName\":\"Rabies\",\"dueDate\":\"2026-12-01\"}"
+}

@@ -1,0 +1,503 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-petapp-dev-5f3d2-authRole",
+      "UnauthRoleArn": "arn:aws:iam::349352224367:role/amplify-petapp-dev-5f3d2-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::349352224367:role/amplify-petapp-dev-5f3d2-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+      "UnauthRoleName": "amplify-petapp-dev-5f3d2-unauthRole",
+      "StackName": "amplify-petapp-dev-5f3d2",
+      "StackId": "arn:aws:cloudformation:ap-south-1:349352224367:stack/amplify-petapp-dev-5f3d2/09833100-415e-11f1-9e4f-02459b77d5a7",
+      "AmplifyAppId": "d1f2tgd7unccl5"
+    }
+  },
+  "auth": {
+    "petvueauth": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 6,
+          "passwordPolicyCharacters": []
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [
+          "GOOGLE"
+        ],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "ap-south-1_XrimDIJRD",
+        "AppClientIDWeb": "17ot02vlfj3khj8779oqeklmcp",
+        "AppClientID": "6ecjm53diq4j34if63dkk9gceo",
+        "UserPoolArn": "arn:aws:cognito-idp:ap-south-1:349352224367:userpool/ap-south-1_XrimDIJRD",
+        "UserPoolName": "petvueauth_userpool_d09097cc",
+        "HostedUIDomain": "petvue-petapp-dev",
+        "IdentityPoolId": "ap-south-1:9ffa5e03-7894-43d7-8a23-b0d56f843d1f",
+        "IdentityPoolName": "petappc31ae546_identitypool_c31ae546__dev",
+        "OAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"email\",\"openid\",\"profile\"],\"CallbackURLs\":[\"petvue://callback//\"],\"LogoutURLs\":[\"petvue://signout//\"]}"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.515Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/auth/petvueauth-cloudformation-template.json",
+        "logicalId": "authpetvueauth"
+      },
+      "lastPushDirHash": "9H45ruluhverKvgmgrjf+LhR4/I="
+    }
+  },
+  "function": {
+    "aiScan": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2026-05-09T23:13:04.525Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-09T23:13:07.007Z",
+      "distZipFilename": "aiScan-312b4770436968306a4b-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/aiScan-312b4770436968306a4b-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/aiScan-cloudformation-template.json",
+        "logicalId": "functionaiScan"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.517Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleAiScan-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:aiScan-dev",
+        "Name": "aiScan-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleAiScan-dev"
+      },
+      "lastPushDirHash": "WYOcHy9hFleN8rL3HDhKCn+6b1M="
+    },
+    "scanInitiate": {
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn"
+          ]
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2026-05-08T15:14:16.979Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-08T15:14:19.670Z",
+      "distZipFilename": "scanInitiate-4f556b4f6e3173314332-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/scanInitiate-4f556b4f6e3173314332-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/scanInitiate-cloudformation-template.json",
+        "logicalId": "functionscanInitiate"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.518Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleScanInitiate-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:scanInitiate-dev",
+        "Name": "scanInitiate-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleScanInitiate-dev"
+      },
+      "lastPushDirHash": "Dl0xS7uDSLEiZdWyLgs2C6OiEcg="
+    },
+    "scanEnqueue": {
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn",
+            "ScanQueueUrl",
+            "ScanQueueArn"
+          ]
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2026-05-08T15:14:22.817Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-08T15:14:24.831Z",
+      "distZipFilename": "scanEnqueue-6769455a4b6a796f4b57-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/scanEnqueue-6769455a4b6a796f4b57-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/scanEnqueue-cloudformation-template.json",
+        "logicalId": "functionscanEnqueue"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.519Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleScanEnqueue-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:scanEnqueue-dev",
+        "Name": "scanEnqueue-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleScanEnqueue-dev"
+      },
+      "lastPushDirHash": "WEuWEgXXzCi6Z0mRHUQLwCoGILA="
+    },
+    "scanWorker": {
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn",
+            "ScanQueueArn"
+          ]
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2026-05-09T23:13:10.753Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-09T23:13:13.524Z",
+      "distZipFilename": "scanWorker-5953486a4d4d39346941-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/scanWorker-5953486a4d4d39346941-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/scanWorker-cloudformation-template.json",
+        "logicalId": "functionscanWorker"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.521Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleScanWorker-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:scanWorker-dev",
+        "Name": "scanWorker-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleScanWorker-dev"
+      },
+      "lastPushDirHash": "ZI8O1xVDdr6x+ASYhArF365QPqc="
+    },
+    "scanResult": {
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "ScansTableName",
+            "ScansTableArn"
+          ]
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2026-05-08T15:14:35.471Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-08T15:14:37.258Z",
+      "distZipFilename": "scanResult-324c5365594864367550-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/scanResult-324c5365594864367550-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/scanResult-cloudformation-template.json",
+        "logicalId": "functionscanResult"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.522Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleScanResult-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:scanResult-dev",
+        "Name": "scanResult-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleScanResult-dev"
+      },
+      "lastPushDirHash": "Cw0gENjm7MXvAqDnd3tOQntrsBE="
+    },
+    "intakeSubmit": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "IntakeFormsTableName",
+            "IntakeFormsTableArn"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2026-05-09T23:13:18.300Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-09T23:13:19.711Z",
+      "distZipFilename": "intakeSubmit-505937576d527a76586e-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/intakeSubmit-505937576d527a76586e-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/intakeSubmit-cloudformation-template.json",
+        "logicalId": "functionintakeSubmit"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.524Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleIntakeSubmit-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:intakeSubmit-dev",
+        "Name": "intakeSubmit-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleIntakeSubmit-dev"
+      },
+      "lastPushDirHash": "Lz3p8beTGIydtDhYi/xa1dHWXnc="
+    },
+    "vaccinationRecord": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "VaccinationsTableName",
+            "VaccinationsTableArn"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2026-05-11T04:57:11.028Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-11T04:57:13.158Z",
+      "distZipFilename": "vaccinationRecord-386e2f743469494c7a54-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/vaccinationRecord-65495037774c49676554-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/vaccinationRecord-cloudformation-template.json",
+        "logicalId": "functionvaccinationRecord"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:57.525Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleVaccinationRecord-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:vaccinationRecord-dev",
+        "Name": "vaccinationRecord-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleVaccinationRecord-dev"
+      },
+      "lastPushDirHash": "2xacOrMAieauiCLYEWT6tbiDNxY="
+    },
+    "bookingRecord": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "BookingsTableName",
+            "BookingsTableArn"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2026-05-11T05:05:35.582Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-11T05:05:38.781Z",
+      "distZipFilename": "bookingRecord-59334459743933664b73-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/bookingRecord-59334459743933664b73-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/bookingRecord-cloudformation-template.json",
+        "logicalId": "functionbookingRecord"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:58.290Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRoleBookingRecord-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:bookingRecord-dev",
+        "Name": "bookingRecord-dev",
+        "LambdaExecutionRole": "petvueLambdaRoleBookingRecord-dev"
+      },
+      "lastPushDirHash": "erbKsYe7XOuNNdW9a35XK04jBnw="
+    },
+    "petMetrics": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "custom",
+          "resourceName": "scanPipelineResources",
+          "attributes": [
+            "WeightLogsTableName",
+            "WeightLogsTableArn",
+            "ActivityLogsTableName",
+            "ActivityLogsTableArn"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2026-05-11T05:05:44.757Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2026-05-11T05:05:47.319Z",
+      "distZipFilename": "petMetrics-653378662b4c63733956-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-petapp-dev-5f3d2-deployment",
+        "s3Key": "amplify-builds/petMetrics-653378662b4c63733956-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/function/petMetrics-cloudformation-template.json",
+        "logicalId": "functionpetMetrics"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:58.290Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::349352224367:role/petvueLambdaRolePetMetrics-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:349352224367:function:petMetrics-dev",
+        "Name": "petMetrics-dev",
+        "LambdaExecutionRole": "petvueLambdaRolePetMetrics-dev"
+      },
+      "lastPushDirHash": "5/clV5OHcdwobJvDpmsaW7BNAXk="
+    }
+  },
+  "custom": {
+    "scanPipelineResources": {
+      "service": "customCloudformation",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/custom/scanPipelineResources-cloudformation-template.json",
+        "logicalId": "customscanPipelineResources"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:58.290Z",
+      "output": {
+        "ScanBucketName": "petvue-scans-349352224367-dev",
+        "ScanBucketArn": "arn:aws:s3:::petvue-scans-349352224367-dev",
+        "ScansTableName": "petvue-scans-dev",
+        "ScansTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-scans-dev",
+        "ScanQueueUrl": "https://sqs.ap-south-1.amazonaws.com/349352224367/petvue-scan-queue-dev",
+        "ScanQueueArn": "arn:aws:sqs:ap-south-1:349352224367:petvue-scan-queue-dev",
+        "IntakeFormsTableName": "petvue-intake-forms-dev",
+        "IntakeFormsTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-intake-forms-dev",
+        "VaccinationsTableName": "petvue-vaccinations-dev",
+        "VaccinationsTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-vaccinations-dev",
+        "BookingsTableName": "petvue-bookings-dev",
+        "WeightLogsTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-weight-logs-dev",
+        "ActivityLogsTableName": "petvue-activity-logs-dev",
+        "ActivityLogsTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-activity-logs-dev",
+        "WeightLogsTableName": "petvue-weight-logs-dev",
+        "BookingsTableArn": "arn:aws:dynamodb:ap-south-1:349352224367:table/petvue-bookings-dev"
+      },
+      "lastPushDirHash": "WAYZiIrWCoJ0fLwNowbHPAJuLBA="
+    }
+  },
+  "api": {
+    "petvueapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "aiScan"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "intakeSubmit"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanInitiate"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanEnqueue"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanResult"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vaccinationRecord"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "bookingRecord"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "petMetrics"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-petapp-dev-5f3d2-deployment/amplify-cfn-templates/api/petvueapi-cloudformation-template.json",
+        "logicalId": "apipetvueapi"
+      },
+      "lastPushTimeStamp": "2026-05-11T05:09:58.290Z",
+      "output": {
+        "ApiName": "dyogszenql",
+        "RootUrl": "https://dyogszenql.execute-api.ap-south-1.amazonaws.com/dev"
+      },
+      "lastPushDirHash": "IrjteQDKeFHJP2L8Fs2RQPyHbHY="
+    }
+  }
+}

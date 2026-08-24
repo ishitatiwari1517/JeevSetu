@@ -1,0 +1,10 @@
+{
+  "lambdaLayers": [],
+  "secretNames": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "modelId",
+      "environmentVariableName": "MODEL_ID"
+    }
+  ]
+}

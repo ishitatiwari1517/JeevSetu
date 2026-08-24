@@ -1,0 +1,87 @@
+{
+  "functionaiScanName": {
+    "Fn::GetAtt": [
+      "functionaiScan",
+      "Outputs.Name"
+    ]
+  },
+  "functionaiScanArn": {
+    "Fn::GetAtt": [
+      "functionaiScan",
+      "Outputs.Arn"
+    ]
+  },
+  "functionscanInitiateName": {
+    "Fn::GetAtt": [
+      "functionscanInitiate",
+      "Outputs.Name"
+    ]
+  },
+  "functionscanInitiateArn": {
+    "Fn::GetAtt": [
+      "functionscanInitiate",
+      "Outputs.Arn"
+    ]
+  },
+  "functionscanEnqueueName": {
+    "Fn::GetAtt": [
+      "functionscanEnqueue",
+      "Outputs.Name"
+    ]
+  },
+  "functionscanEnqueueArn": {
+    "Fn::GetAtt": [
+      "functionscanEnqueue",
+      "Outputs.Arn"
+    ]
+  },
+  "functionscanResultName": {
+    "Fn::GetAtt": [
+      "functionscanResult",
+      "Outputs.Name"
+    ]
+  },
+  "functionscanResultArn": {
+    "Fn::GetAtt": [
+      "functionscanResult",
+      "Outputs.Arn"
+    ]
+  },
+  "functionvaccinationRecordName": {
+    "Fn::GetAtt": [
+      "functionvaccinationRecord",
+      "Outputs.Name"
+    ]
+  },
+  "functionvaccinationRecordArn": {
+    "Fn::GetAtt": [
+      "functionvaccinationRecord",
+      "Outputs.Arn"
+    ]
+  },
+  "functionbookingRecordName": {
+    "Fn::GetAtt": [
+      "functionbookingRecord",
+      "Outputs.Name"
+    ]
+  },
+  "functionbookingRecordArn": {
+    "Fn::GetAtt": [
+      "functionbookingRecord",
+      "Outputs.Arn"
+    ]
+  },
+  "functionpetMetricsName": {
+    "Fn::GetAtt": [ "functionpetMetrics", "Outputs.Name" ]
+  },
+  "functionpetMetricsArn": {
+    "Fn::GetAtt": [ "functionpetMetrics", "Outputs.Arn" ]
+  },
+  "functionvetFinderName": {
+    "Fn::GetAtt": [ "functionvetFinder", "Outputs.Name" ]
+  },
+  "functionvetFinderArn": {
+    "Fn::GetAtt": [ "functionvetFinder", "Outputs.Arn" ]
+  },
+  "authpetvueauthUserPoolArn": "arn:aws:cognito-idp:ap-south-1:349352224367:userpool/ap-south-1_XrimDIJRD"
+}

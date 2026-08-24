@@ -1,0 +1,7 @@
+{
+  "httpMethod": "POST",
+  "resource": "/bookings",
+  "pathParameters": null,
+  "requestContext": { "authorizer": { "claims": { "sub": "user-abc" } } },
+  "body": "{\"petId\":\"pet-123\",\"serviceType\":\"vet-visit\",\"scheduledAt\":\"2026-06-01T10:30:00Z\"}"
+}

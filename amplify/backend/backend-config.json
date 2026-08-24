@@ -1,0 +1,483 @@
+{
+  "api": {
+    "petvueapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "aiScan"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "intakeSubmit"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanInitiate"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanEnqueue"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "scanResult"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vaccinationRecord"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "bookingRecord"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "petMetrics"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vetFinder"
+        },
+        {
+          "attributes": [
+            "UserPoolId",
+            "UserPoolArn"
+          ],
+          "category": "auth",
+          "resourceName": "petvueauth"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "petvueauth": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 6
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [
+          "GOOGLE"
+        ],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "custom": {
+    "scanPipelineResources": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "customCloudformation"
+    }
+  },
+  "function": {
+    "aiScan": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "bookingRecord": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BookingsTableName",
+            "BookingsTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "intakeSubmit": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "IntakeFormsTableName",
+            "IntakeFormsTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "petMetrics": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "WeightLogsTableName",
+            "WeightLogsTableArn",
+            "ActivityLogsTableName",
+            "ActivityLogsTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "scanEnqueue": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn",
+            "ScanQueueUrl",
+            "ScanQueueArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "scanInitiate": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "scanResult": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ScansTableName",
+            "ScansTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "scanWorker": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "ScanBucketName",
+            "ScanBucketArn",
+            "ScansTableName",
+            "ScansTableArn",
+            "ScanQueueArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "vaccinationRecord": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "VaccinationsTableName",
+            "VaccinationsTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "vetFinder": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "VetCacheTableName",
+            "VetCacheTableArn"
+          ],
+          "category": "custom",
+          "resourceName": "scanPipelineResources"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_aiScan_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiScan"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiScan_modelId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiScan"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiScan_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiScan"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiScan_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiScan"
+        }
+      ]
+    },
+    "AMPLIFY_function_bookingRecord_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bookingRecord"
+        }
+      ]
+    },
+    "AMPLIFY_function_bookingRecord_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bookingRecord"
+        }
+      ]
+    },
+    "AMPLIFY_function_intakeSubmit_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "intakeSubmit"
+        }
+      ]
+    },
+    "AMPLIFY_function_intakeSubmit_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "intakeSubmit"
+        }
+      ]
+    },
+    "AMPLIFY_function_petMetrics_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petMetrics"
+        }
+      ]
+    },
+    "AMPLIFY_function_petMetrics_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petMetrics"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanEnqueue_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanEnqueue"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanEnqueue_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanEnqueue"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanInitiate_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanInitiate"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanInitiate_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanInitiate"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanResult_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanResult"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanResult_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanResult"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanWorker_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanWorker"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanWorker_modelId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanWorker"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanWorker_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanWorker"
+        }
+      ]
+    },
+    "AMPLIFY_function_scanWorker_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scanWorker"
+        }
+      ]
+    },
+    "AMPLIFY_function_vaccinationRecord_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vaccinationRecord"
+        }
+      ]
+    },
+    "AMPLIFY_function_vaccinationRecord_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vaccinationRecord"
+        }
+      ]
+    },
+    "AMPLIFY_function_vetFinder_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vetFinder"
+        }
+      ]
+    },
+    "AMPLIFY_function_vetFinder_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vetFinder"
+        }
+      ]
+    },
+    "AMPLIFY_function_vetFinder_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vetFinder"
+        }
+      ]
+    }
+  }
+}
