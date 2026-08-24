@@ -46,5 +46,6 @@ export const recordScan = async (input: RecordScanInput): Promise<Scan> => {
 
 export const listScansByAnimal = async (animalId: string): Promise<Scan[]> => {
   const all = await listScans();
+  // Strict match — only scans tagged to this specific animal.
   return all.filter(s => s.animalId === animalId);
 };
