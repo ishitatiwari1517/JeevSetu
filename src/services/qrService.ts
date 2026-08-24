@@ -9,17 +9,21 @@ import { updateAnimal } from './animalService';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const PUBLIC_BASE_URL = 'https://petvue.app/p';
+// Deep link scheme registered in ios/PetApp/Info.plist.
+// Scanning the QR opens the app directly to the animal's adoption profile.
+// Format: petvue://animal/{animalId}
+const DEEP_LINK_BASE = 'petvue://animal';
 
 // ── URL helpers ───────────────────────────────────────────────────────────────
 
 /**
- * Canonical public profile URL for an animal.
- * The QR code encodes this URL — it must be stable forever.
- * Uses animal.id (not caseId) so it survives case ID changes.
+ * Deep link URL encoded in the QR code.
+ * Scanning this with iPhone Camera app opens PetVue straight to the animal profile.
+ * Uses animal.id (not caseId) so it never breaks even if caseId changes.
  */
 export const getPublicProfileUrl = (animalId: string): string =>
-  `${PUBLIC_BASE_URL}/${animalId}`;
+  `${DEEP_LINK_BASE}/${animalId}`;
+
 
 /**
  * Human-readable slug shown below the QR code.

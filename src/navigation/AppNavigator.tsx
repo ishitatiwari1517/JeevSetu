@@ -1,4 +1,5 @@
 import React from 'react';
+import { Linking } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,13 +37,14 @@ const AdoptionStack = createNativeStackNavigator();
 // ── Today tab ─────────────────────────────────────────────────────────────────
 const TodayStackNavigator = () => (
   <TodayStack.Navigator screenOptions={{ headerShown: false }}>
-    <TodayStack.Screen name="TodayMain"          component={TodayScreen} />
-    <TodayStack.Screen name="Scan"               component={MultiImageCaptureScreen} />
-    <TodayStack.Screen name="ScanProcessing"     component={ScanProcessingScreen} />
-    <TodayStack.Screen name="ScanResult"         component={ScanResultScreen} />
-    <TodayStack.Screen name="AnimalDetail"       component={AnimalDetailScreen} />
-    <TodayStack.Screen name="AddMedicalRecord"   component={AddMedicalRecordScreen} />
-    <TodayStack.Screen name="MedicationSchedule" component={MedicationScheduleScreen} />
+    <TodayStack.Screen name="TodayMain"              component={TodayScreen} />
+    <TodayStack.Screen name="Scan"                   component={MultiImageCaptureScreen} />
+    <TodayStack.Screen name="ScanProcessing"         component={ScanProcessingScreen} />
+    <TodayStack.Screen name="ScanResult"             component={ScanResultScreen} />
+    <TodayStack.Screen name="AnimalDetail"           component={AnimalDetailScreen} />
+    <TodayStack.Screen name="AddMedicalRecord"       component={AddMedicalRecordScreen} />
+    <TodayStack.Screen name="MedicationSchedule"     component={MedicationScheduleScreen} />
+    <TodayStack.Screen name="AnimalAdoptionProfile"  component={AnimalAdoptionProfileScreen} />
   </TodayStack.Navigator>
 );
 
@@ -104,9 +106,34 @@ const TAB_LABEL_STYLE = {
   fontWeight: '600' as const,
 };
 
+// ── Deep link config ─────────────────────────────────────────────────────────
+// petvue://animal/{animalId}  →  AnimalAdoptionProfile screen
+const linking = {
+  prefixes: ['petvue://'],
+  config: {
+    screens: {
+      Today: {
+        screens: {
+          AnimalAdoptionProfile: 'animal/:animalId',
+        },
+      },
+      Animals: {
+        screens: {
+          AnimalAdoptionProfile: 'animal/:animalId',
+        },
+      },
+      Adoption: {
+        screens: {
+          AnimalAdoptionProfile: 'animal/:animalId',
+        },
+      },
+    },
+  },
+};
+
 // ── Root navigator ────────────────────────────────────────────────────────────
 const AppNavigator = () => (
-  <NavigationContainer>
+  <NavigationContainer linking={linking} onUnhandledAction={() => {}}>
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
