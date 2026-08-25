@@ -12,7 +12,12 @@ const generateId = (): string =>
 export const getOrganization = async (): Promise<Organization | null> => {
   try {
     const raw = await AsyncStorage.getItem(ORG_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    const org = JSON.parse(raw);
+    if (org) {
+      org.id = 'default'; // Force ID to 'default' for stable local storage key routing
+    }
+    return org;
   } catch {
     return null;
   }
@@ -42,8 +47,11 @@ export const updateOrganization = async (patch: UpdateOrganizationInput): Promis
 export const ensureDefaultOrganization = async (): Promise<Organization> => {
   const existing = await getOrganization();
   if (existing) return existing;
-  // Create a default org for first-time setup
-  return createOrganization({
+  
+  // Create a default org for first-time setup with fixed ID 'default'
+  const now = new Date().toISOString();
+  const org: Organization = {
+    id: 'default',
     name: 'My Shelter',
     address: '',
     city: '',
@@ -51,5 +59,10 @@ export const ensureDefaultOrganization = async (): Promise<Organization> => {
     contactPhone: '',
     capacity: 100,
     plan: 'free',
-  });
+    currentCount: 0,
+    createdAt: now,
+    updatedAt: now,
+  };
+  await AsyncStorage.setItem(ORG_KEY, JSON.stringify(org));
+  return org;
 };
