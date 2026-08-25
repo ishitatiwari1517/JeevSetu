@@ -56,7 +56,7 @@ export const getPublicProfileUrl = (animal: Animal, org?: Organization | null): 
   };
 
   const payload = encodeBase64(JSON.stringify(data));
-  return `https://ishitatiwari1517.github.io/PetVue-app/?data=${payload}`;
+  return `https://ishitatiwari1517.github.io/PetVue-adopt/?data=${payload}`;
 };
 
 /**
