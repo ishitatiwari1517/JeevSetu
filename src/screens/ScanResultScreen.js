@@ -23,20 +23,21 @@ const ScanResultScreen = ({ navigation, route }) => {
   const findings = useMemo(() => visibleFindings(result?.findings ?? []), [result]);
 
   const goToVetFinder = () => {
+    const query = '24 hour emergency veterinary clinic';
     const url = Platform.select({
-      ios: 'maps://?q=24/7+veterinarian+near+me',
-      android: 'geo:0,0?q=24/7+veterinarian+near+me',
+      ios: `maps://?q=${encodeURIComponent(query)}`,
+      android: `geo:0,0?q=${encodeURIComponent(query)}`,
     });
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
           Linking.openURL(url);
         } else {
-          Linking.openURL('https://www.google.com/maps/search/24/7+veterinarian+near+me');
+          Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`);
         }
       })
       .catch(() => {
-        Linking.openURL('https://www.google.com/maps/search/24/7+veterinarian+near+me');
+        Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`);
       });
   };
   
