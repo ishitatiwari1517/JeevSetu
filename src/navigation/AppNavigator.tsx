@@ -27,6 +27,11 @@ import VolunteerDetailScreen     from '../screens/VolunteerDetailScreen';
 import AdoptionShowcaseScreen       from '../screens/AdoptionShowcaseScreen';
 import AnimalAdoptionProfileScreen  from '../screens/AnimalAdoptionProfileScreen';
 
+// Booking & Intake Form screens
+import BookScreen                   from '../screens/BookScreen';
+import BookingConfirmationScreen    from '../screens/BookingConfirmationScreen';
+import IntakeFormScreen             from '../screens/IntakeFormScreen';
+
 // ── Stack navigators ──────────────────────────────────────────────────────────
 const Tab           = createBottomTabNavigator();
 const TodayStack    = createNativeStackNavigator();
@@ -45,6 +50,9 @@ const TodayStackNavigator = () => (
     <TodayStack.Screen name="AddMedicalRecord"       component={AddMedicalRecordScreen} />
     <TodayStack.Screen name="MedicationSchedule"     component={MedicationScheduleScreen} />
     <TodayStack.Screen name="AnimalAdoptionProfile"  component={AnimalAdoptionProfileScreen} />
+    <TodayStack.Screen name="Book"                   component={BookScreen} />
+    <TodayStack.Screen name="BookingConfirmation"    component={BookingConfirmationScreen} />
+    <TodayStack.Screen name="IntakeForm"             component={IntakeFormScreen} />
   </TodayStack.Navigator>
 );
 
@@ -60,6 +68,9 @@ const AnimalsStackNavigator = () => (
     <AnimalsStack.Screen name="ScanProcessing"       component={ScanProcessingScreen} />
     <AnimalsStack.Screen name="ScanResult"           component={ScanResultScreen} />
     <AnimalsStack.Screen name="AnimalAdoptionProfile" component={AnimalAdoptionProfileScreen} />
+    <AnimalsStack.Screen name="Book"                 component={BookScreen} />
+    <AnimalsStack.Screen name="BookingConfirmation"  component={BookingConfirmationScreen} />
+    <AnimalsStack.Screen name="IntakeForm"           component={IntakeFormScreen} />
   </AnimalsStack.Navigator>
 );
 

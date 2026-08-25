@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  StatusBar, ImageBackground,
+  StatusBar, ImageBackground, Platform, Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,7 +22,24 @@ const ScanResultScreen = ({ navigation, route }) => {
   const banner = STATUS_BANNER[result?.overallStatus] ?? STATUS_BANNER.NEEDS_ATTENTION;
   const findings = useMemo(() => visibleFindings(result?.findings ?? []), [result]);
 
-  const goToVetFinder = () => navigation.navigate('Book');
+  const goToVetFinder = () => {
+    const url = Platform.select({
+      ios: 'maps://?q=24/7+veterinarian+near+me',
+      android: 'geo:0,0?q=24/7+veterinarian+near+me',
+    });
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          Linking.openURL('https://www.google.com/maps/search/24/7+veterinarian+near+me');
+        }
+      })
+      .catch(() => {
+        Linking.openURL('https://www.google.com/maps/search/24/7+veterinarian+near+me');
+      });
+  };
+  
   const scheduleCheckup = () => navigation.navigate('Book');
 
   const riskColors = RISK_COLORS[result?.riskLevel] || RISK_COLORS.Low;
