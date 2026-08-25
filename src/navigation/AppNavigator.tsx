@@ -157,10 +157,42 @@ const AppNavigator = () => (
         ),
       })}
     >
-      <Tab.Screen name="Today"    component={TodayStackNavigator} />
-      <Tab.Screen name="Animals"  component={AnimalsStackNavigator} />
-      <Tab.Screen name="People"   component={PeopleStackNavigator} />
-      <Tab.Screen name="Adoption" component={AdoptionStackNavigator} />
+      <Tab.Screen
+        name="Today"
+        component={TodayStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate('Today', { screen: 'TodayMain' });
+          },
+        })}
+      />
+      <Tab.Screen
+        name="Animals"
+        component={AnimalsStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate('Animals', { screen: 'AnimalRoster' });
+          },
+        })}
+      />
+      <Tab.Screen
+        name="People"
+        component={PeopleStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate('People', { screen: 'PeopleMain' });
+          },
+        })}
+      />
+      <Tab.Screen
+        name="Adoption"
+        component={AdoptionStackNavigator}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate('Adoption', { screen: 'AdoptionShowcase' });
+          },
+        })}
+      />
     </Tab.Navigator>
   </NavigationContainer>
 );
