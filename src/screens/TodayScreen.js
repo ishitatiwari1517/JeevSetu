@@ -257,9 +257,9 @@ const TodayScreen = ({ navigation }) => {
             onPress={() => setScanPickerVisible(true)}
           />
           <QuickAction
-            icon="pill"         label="Medications"
-            color={COLORS.attention} bg={COLORS.attentionBg}
-            onPress={() => navigation.navigate('MedicationSchedule')}
+            icon="qrcode-scan"  label="Scan QR"
+            color="#0369A1"         bg="#E0F2FE"
+            onPress={() => navigation.navigate('QRScanner')}
           />
           <QuickAction
             icon="clipboard-list" label="All Animals"

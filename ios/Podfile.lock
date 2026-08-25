@@ -2015,6 +2015,28 @@ PODS:
     - React-perflogger (= 0.85.2)
     - React-utils (= 0.85.2)
     - ReactNativeDependencies
+  - ReactNativeCameraKit (18.0.1):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - ReactNativeDependencies (0.85.2)
   - RecaptchaInterop (101.0.0)
   - RNAWSCognito (6.3.16):
@@ -2285,6 +2307,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios/ReactAppDependencyProvider`)
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
   - RecaptchaInterop
   - RNAWSCognito (from `../node_modules/amazon-cognito-identity-js`)
@@ -2470,6 +2493,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios/ReactCodegen
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeCameraKit:
+    :path: "../node_modules/react-native-camera-kit"
   ReactNativeDependencies:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
   RNAWSCognito:
@@ -2578,6 +2603,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 22e2265d86a4e871e5e858f4e7ef1c8d01103680
   ReactCodegen: 5bd23df5c8ad6c87df0bc8ccd391bd37bf6c92d5
   ReactCommon: a804bb8d1dcf3ecdec3a77eb8bba19b7863bbbdb
+  ReactNativeCameraKit: a959e13e037b86e126ce5cd51013fa5a9c194495
   ReactNativeDependencies: c7f669118a4978347c96b53188c5090843194199
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNAWSCognito: c271cb77af824c5fbfb5060cb22ecae245376939
