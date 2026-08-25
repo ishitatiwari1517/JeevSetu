@@ -49,6 +49,7 @@ export const localScanHistoryStorage: ScanHistoryStorage = {
       id: newId(),
       userId,
       petId: input.petId,
+      animalId: input.animalId,
       result: input.result,
       heroUri: input.heroUri,
       imageCount: input.imageCount,
