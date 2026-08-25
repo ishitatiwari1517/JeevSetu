@@ -35,7 +35,11 @@ const encodeBase64 = (str: string): string => {
  * allowing anyone scanning it with their native phone camera to instantly view
  * the animal's photo, AI bio, health card, and apply to adopt in their browser.
  */
-export const getPublicProfileUrl = (animal: Animal, org?: Organization | null): string => {
+export const getPublicProfileUrl = (
+  animal: Animal,
+  org?: Organization | null,
+  vaccinations?: any[]
+): string => {
   const data = {
     id: animal.id,
     caseId: animal.caseId,
@@ -50,6 +54,23 @@ export const getPublicProfileUrl = (animal: Animal, org?: Organization | null): 
     adoptionDescription: animal.adoptionDescription,
     aiAdoptionSummary: animal.aiAdoptionSummary,
     photoUrl: animal.primaryPhotoUri || animal.photoUrl,
+    
+    // Rescue story info
+    intakeDate: animal.intakeDate,
+    intakeSource: animal.intakeSource,
+    intakeCondition: animal.intakeCondition,
+    microchipId: animal.microchipId,
+    behaviourNotes: animal.behaviourNotes,
+    specialNeeds: animal.specialNeeds,
+    dietaryRequirements: animal.dietaryRequirements,
+    
+    // Vaccinations
+    vaccinations: (vaccinations || []).map(v => ({
+      title: v.title,
+      date: v.date || v.createdAt
+    })),
+
+    // Shelter info
     shelterName: org?.name || 'PetVue Shelter Partner',
     shelterEmail: org?.contactEmail || 'adopt@petvue.app',
     shelterPhone: org?.contactPhone || ''

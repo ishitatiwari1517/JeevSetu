@@ -7,20 +7,19 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
-      --brand: #2b7a9e;
-      --brand-light: #e0f2fe;
-      --brand-gradient: linear-gradient(135deg, #2b7a9e 0%, #1d4ed8 100%);
-      --bg: #f8fafc;
+      --brand: #7c3aed; /* Purple brand color to match the screen's styling */
+      --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      --bg: #f3f4f6;
       --surface: #ffffff;
       --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
       
       --critical: #ef4444;
       --critical-bg: #fee2e2;
@@ -30,10 +29,10 @@
       --healthy-bg: #d1fae5;
       
       --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --transition: all 0.2s ease-in-out;
     }
 
     * {
@@ -51,7 +50,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px;
+      padding: 16px 12px;
     }
 
     .container {
@@ -60,221 +59,253 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      animation: fadeIn 0.6s ease-out;
+      gap: 16px;
+      animation: fadeIn 0.4s ease-out;
     }
 
-    /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Card Base */
-    .card {
-      background-color: var(--surface);
+    /* Header Profile Card */
+    .header-card {
+      background-color: #f5f3ff;
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
       overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
-    }
-
-    /* Photo Banner */
-    .photo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      text-align: center;
       position: relative;
-      width: 100%;
-      height: 320px;
-      background-color: #f1f5f9;
+    }
+
+    .avatar-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background-color: #e0e7ff;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 3px solid #ffffff;
       overflow: hidden;
     }
 
-    .animal-photo {
+    .avatar-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: var(--transition);
     }
 
-    .photo-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-muted);
-    }
-
-    .photo-placeholder svg {
-      width: 64px;
-      height: 64px;
-      stroke-width: 1.5;
-    }
-
-    .health-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Profile Header Info */
-    .profile-info {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    .avatar-wrap svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--brand);
     }
 
     .animal-name {
       font-family: 'Outfit', sans-serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       color: var(--text-primary);
     }
 
-    .case-id {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      background-color: #f1f5f9;
-      padding: 3px 8px;
-      border-radius: var(--radius-sm);
+    .animal-species {
+      font-size: 14px;
+      color: var(--text-secondary);
       margin-top: 4px;
-      display: inline-block;
     }
 
-    /* Grid of Key Attributes */
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .spec-card {
-      background-color: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 4px;
-    }
-
-    .spec-label {
-      font-size: 11px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-
-    .spec-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    /* Biography Section */
-    .section-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .bio-card {
-      padding: 24px;
-    }
-
-    .bio-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* AI Generated Bio style */
-    .ai-bio-card {
-      background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 100%);
-      border: 1px solid #e9d5ff;
-    }
-
-    .ai-badge {
+    .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      background-color: #c084fc;
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
+      gap: 6px;
+      padding: 6px 16px;
       border-radius: 50px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+      text-transform: capitalize;
     }
 
-    /* Medical Checklist */
-    .check-row {
+    /* Section Card styling matching App's cards */
+    .section-card {
+      background-color: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .check-row:last-child {
-      border-bottom: none;
-    }
-
-    .check-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .check-status {
+    .section-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background-color: #f3e8ff;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
     }
 
-    /* Call To Action Buttons */
+    .section-icon-wrap svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--brand);
+      stroke-width: 2;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Row table list inside card */
+    .info-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .info-row:first-child {
+      padding-top: 0;
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .info-value.raw {
+      text-transform: none;
+    }
+
+    /* Check values */
+    .status-check {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 700;
+    }
+
+    .status-check.yes { color: var(--healthy); }
+    .status-check.no { color: var(--critical); }
+    
+    .status-check svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.5;
+    }
+
+    /* Bullet List Style */
+    .bullet-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bullet-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .bullet-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--brand);
+      margin-top: 8px;
+    }
+
+    .bullet-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .bullet-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    /* AI bio layout matches screen 4 */
+    .ai-summary-card {
+      border: 1.5px solid #d8b4fe;
+      background: linear-gradient(180deg, #FAF5FF 0%, #F5F3FF 100%);
+    }
+
+    .ai-sparkle-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #f3e8ff;
+      color: var(--brand);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid #e9d5ff;
+      margin-bottom: 12px;
+    }
+
+    .ai-sparkle-badge svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--brand);
+      stroke-width: 2.5;
+    }
+
+    .ai-bio-text {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    /* Button and CTA */
     .cta-container {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .btn {
@@ -284,8 +315,8 @@
       gap: 10px;
       width: 100%;
       padding: 16px;
-      border-radius: var(--radius-md);
-      font-size: 16px;
+      border-radius: 50px; /* Fully rounded buttons */
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       border: none;
@@ -296,11 +327,11 @@
     .btn-primary {
       background: var(--brand-gradient);
       color: white;
-      box-shadow: 0 4px 14px rgba(43, 122, 158, 0.35);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
     }
 
     .btn-primary:hover {
-      box-shadow: 0 6px 20px rgba(43, 122, 158, 0.45);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
       transform: translateY(-1px);
     }
 
@@ -311,10 +342,10 @@
     }
 
     .btn-secondary:hover {
-      background-color: var(--brand-light);
+      background-color: #faf5ff;
     }
 
-    /* Footer */
+    /* Footer styling */
     footer {
       text-align: center;
       padding: 24px 0 40px;
@@ -352,95 +383,148 @@
 <body>
 
   <div class="container" id="profileContainer">
-    <!-- Header/Banner Card -->
-    <div class="card">
-      <div class="photo-container">
-        <img id="animalPhoto" class="animal-photo" src="" alt="Rescue Animal" style="display: none;">
-        <div id="photoPlaceholder" class="photo-placeholder">
-          <i data-lucide="paw-print"></i>
-          <span style="font-size: 14px; font-weight: 500;">No Image Available</span>
-        </div>
-        <div id="healthBadge" class="health-badge">Stable</div>
+    <!-- Header/Avatar Card -->
+    <div class="header-card">
+      <div class="avatar-wrap">
+        <img id="animalPhoto" class="avatar-img" src="" alt="Rescue Animal" style="display: none;">
+        <i data-lucide="paw-print" id="photoPlaceholder"></i>
       </div>
       
-      <div class="profile-info">
-        <div class="title-row">
-          <div>
-            <h1 id="animalName" class="animal-name">Rescue Animal</h1>
-            <span id="caseId" class="case-id">PV-XXXX-XXXX</span>
-          </div>
-        </div>
+      <h1 id="animalName" class="animal-name">Unnamed</h1>
+      <p id="animalSpecies" class="animal-species">Cat</p>
+      
+      <div id="healthBadge" class="status-badge" style="background-color: var(--healthy-bg); color: var(--healthy);">Stable</div>
+    </div>
 
-        <div class="specs-grid">
-          <div class="spec-card">
-            <span class="spec-label">Species</span>
-            <span id="specSpecies" class="spec-value">-</span>
-          </div>
-          <div class="spec-card">
-            <span class="spec-label">Breed</span>
-            <span id="specBreed" class="spec-value">-</span>
-          </div>
-          <div class="spec-card">
-            <span class="spec-label">Age</span>
-            <span id="specAge" class="spec-value">-</span>
-          </div>
+    <!-- Section 1: Identity -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="contact-2"></i></div>
+        <h2 class="section-title">Identity</h2>
+      </div>
+      <div class="info-list">
+        <div class="info-row">
+          <span class="info-label">Case ID</span>
+          <span id="caseId" class="info-value raw">PV-XXXX-XXXX</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Species</span>
+          <span id="infoSpecies" class="info-value">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Gender</span>
+          <span id="infoGender" class="info-value">-</span>
         </div>
       </div>
     </div>
 
-    <!-- Portfolio Description Card -->
-    <div class="card bio-card" id="bioCard">
-      <h2 class="section-title"><i data-lucide="book-open"></i> Portfolio Description</h2>
-      <p id="adoptionBio" class="bio-text">No bio description has been provided for this animal yet.</p>
-    </div>
-
-    <!-- Checklist Card -->
-    <div class="card">
-      <div class="check-row">
-        <div class="check-label">
-          <i data-lucide="gender"></i>
-          <span>Gender</span>
-        </div>
-        <span id="genderVal" style="font-weight: 600; text-transform: capitalize;">Unknown</span>
+    <!-- Section 2: Rescue Story -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="map-pin"></i></div>
+        <h2 class="section-title">Rescue Story</h2>
       </div>
-      <div class="check-row">
-        <div class="check-label">
-          <i data-lucide="shield-check"></i>
-          <span>Vaccinated</span>
+      <div class="info-list">
+        <div class="info-row">
+          <span class="info-label">Intake Date</span>
+          <span id="intakeDate" class="info-value raw">-</span>
         </div>
-        <div id="vaccinatedCheck" class="check-status"></div>
-      </div>
-      <div class="check-row">
-        <div class="check-label">
-          <i data-lucide="activity"></i>
-          <span>Neutered / Spayed</span>
+        <div class="info-row">
+          <span class="info-label">Source</span>
+          <span id="intakeSource" class="info-value">-</span>
         </div>
-        <div id="neuteredCheck" class="check-status"></div>
+        <div class="info-row">
+          <span class="info-label">Cond. at Intake</span>
+          <span id="intakeCondition" class="info-value">-</span>
+        </div>
       </div>
     </div>
 
-    <!-- Contact & Application Buttons -->
+    <!-- Section 3: Health Status -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="heart-pulse"></i></div>
+        <h2 class="section-title">Health Status</h2>
+      </div>
+      <div class="info-list">
+        <div class="info-row">
+          <span class="info-label">Overall Health</span>
+          <span id="overallHealth" class="info-value">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Vaccinated</span>
+          <span id="vaccinatedCheck" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Neutered/Spayed</span>
+          <span id="neuteredCheck" class="info-value"></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Microchip</span>
+          <span id="microchipVal" class="info-value"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Vaccinations -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="syringe"></i></div>
+        <h2 class="section-title">Vaccinations</h2>
+      </div>
+      <div id="vaccinationsList" class="bullet-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Section 5: Behaviour -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="smile"></i></div>
+        <h2 class="section-title">Behaviour</h2>
+      </div>
+      <div id="behaviourNotes" class="empty-text">No behaviour notes recorded.</div>
+    </div>
+
+    <!-- Section 6: Care Requirements -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon-wrap"><i data-lucide="heart-handshake"></i></div>
+        <h2 class="section-title">Care Requirements</h2>
+      </div>
+      <div id="careRequirements" class="empty-text">No special care needs noted.</div>
+    </div>
+
+    <!-- Section 7: AI Adoption Summary -->
+    <div class="section-card ai-summary-card" id="aiSummarySection">
+      <div class="ai-sparkle-badge">
+        <i data-lucide="sparkles"></i> AI Adoption Summary
+      </div>
+      <p id="aiSummaryBio" class="ai-bio-text"></p>
+    </div>
+
+    <!-- Application Action Buttons -->
     <div class="cta-container">
       <a href="#" id="adoptBtn" class="btn btn-primary">
         <i data-lucide="heart"></i> Apply for Adoption
       </a>
-      <a href="#" id="callBtn" class="btn btn-secondary">
+      <a href="#" id="callBtn" class="btn btn-secondary" style="display: none;">
         <i data-lucide="phone"></i> Contact Shelter
       </a>
     </div>
 
     <!-- Footer -->
     <footer>
-      <span class="shelter-badge" id="shelterName">PetVue Rescue Partner</span>
-      <span>Powered by PetVue Platform &copy; 2026</span>
+      <span class="shelter-badge" id="shelterName">My Shelter</span>
+      <span id="footerText">Powered by PetVue Platform &copy; 2026</span>
     </footer>
   </div>
 
   <!-- Error Container -->
   <div class="container" id="errorContainer">
-    <div class="card error-container">
+    <div class="card error-container" style="background-color: white; border-radius: var(--radius-lg); border: 1px solid var(--border);">
       <i data-lucide="alert-triangle"></i>
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700;">Profile Not Found</h1>
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-primary);">Profile Not Found</h1>
       <p style="color: var(--text-secondary); font-size: 14px;">The link is invalid or the animal's profile is not published for public view yet.</p>
     </div>
   </div>
@@ -455,7 +539,6 @@
       return urlParams.get(param);
     }
 
-    // Set colors for health states
     const HEALTH_STATUS_STYLES = {
       critical: { bg: '#fee2e2', text: '#ef4444' },
       needs_attention: { bg: '#fef3c7', text: '#f59e0b' },
@@ -471,7 +554,6 @@
       }
 
       try {
-        // Decode base64 to Unicode string
         const jsonString = decodeURIComponent(atob(base64Data).split('').map(function(c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
@@ -488,14 +570,10 @@
       document.getElementById('profileContainer').style.display = 'flex';
       document.getElementById('errorContainer').style.display = 'none';
 
-      // Basic Identity
-      document.getElementById('animalName').innerText = animal.name || 'Unnamed Animal';
-      document.getElementById('caseId').innerText = animal.caseId || 'PV-Unknown';
-      document.getElementById('specSpecies').innerText = animal.species ? animal.species.toUpperCase() : '-';
-      document.getElementById('specBreed').innerText = animal.breed || 'Mixed Breed';
-      document.getElementById('specAge').innerText = animal.age || animal.estimatedAge || 'Unknown';
-
-      // Health badge
+      // Header info
+      document.getElementById('animalName').innerText = animal.name || 'Unnamed';
+      document.getElementById('animalSpecies').innerText = animal.species ? animal.species.charAt(0).toUpperCase() + animal.species.slice(1) : 'Rescue Animal';
+      
       const health = animal.healthStatus || 'stable';
       const healthBadge = document.getElementById('healthBadge');
       healthBadge.innerText = health.replace('_', ' ');
@@ -512,64 +590,120 @@
         placeholder.style.display = 'none';
       } else {
         photoImg.style.display = 'none';
-        placeholder.style.display = 'flex';
+        placeholder.style.display = 'block';
       }
 
-      // Bio / Portfolio Description
-      const bioText = animal.aiSummary || animal.aiAdoptionSummary || animal.description || animal.adoptionDescription;
-      const bioCard = document.getElementById('bioCard');
-      if (bioText) {
-        document.getElementById('adoptionBio').innerText = bioText;
-        // If it's an AI summary, style it with a nice background
-        if (animal.aiSummary || animal.aiAdoptionSummary) {
-          bioCard.className = "card bio-card ai-bio-card";
-          // Add AI badge dynamically if not already there
-          if (!bioCard.querySelector('.ai-badge')) {
-            const aiBadge = document.createElement('div');
-            aiBadge.className = 'ai-badge';
-            aiBadge.innerHTML = '<i data-lucide="sparkles" style="width: 10px; height: 10px; margin-right: 4px;"></i> AI Bio';
-            bioCard.insertBefore(aiBadge, bioCard.firstChild);
-            lucide.createIcons();
-          }
-        }
-      }
+      // Section 1: Identity details
+      document.getElementById('caseId').innerText = animal.caseId || 'PV-Unknown';
+      document.getElementById('infoSpecies').innerText = animal.species ? animal.species.charAt(0).toUpperCase() + animal.species.slice(1) : '-';
+      document.getElementById('infoGender').innerText = animal.gender || '-';
 
-      // Gender
-      document.getElementById('genderVal').innerText = animal.gender || 'Unknown';
+      // Section 2: Rescue Story info
+      const formatDate = (isoString) => {
+        if (!isoString) return '-';
+        try {
+          const d = new Date(isoString);
+          return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch (_) { return isoString; }
+      };
+      document.getElementById('intakeDate').innerText = formatDate(animal.intakeDate);
+      document.getElementById('intakeSource').innerText = animal.intakeSource ? animal.intakeSource.replace(/_/g, ' ') : '-';
+      document.getElementById('intakeCondition').innerText = animal.intakeCondition ? animal.intakeCondition.replace(/_/g, ' ') : '-';
 
-      // Checklists (Neutered, Vaccinated)
-      const renderCheck = (elementId, isTrue) => {
+      // Section 3: Health checklist
+      document.getElementById('overallHealth').innerText = health.replace('_', ' ');
+      
+      const renderCheckText = (elementId, isTrue) => {
         const el = document.getElementById(elementId);
         if (isTrue) {
-          el.style.backgroundColor = '#d1fae5';
-          el.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px; stroke: #10b981; stroke-width: 3;"></i>';
+          el.className = 'status-check yes';
+          el.innerHTML = '<i data-lucide="check"></i> Yes';
         } else {
-          el.style.backgroundColor = '#fee2e2';
-          el.innerHTML = '<i data-lucide="x" style="width: 16px; height: 16px; stroke: #ef4444; stroke-width: 3;"></i>';
+          el.className = 'status-check no';
+          el.innerHTML = '<i data-lucide="x"></i> No';
         }
       };
-      renderCheck('vaccinatedCheck', animal.isVaccinated);
-      renderCheck('neuteredCheck', animal.isNeutered);
+      renderCheckText('vaccinatedCheck', animal.isVaccinated);
+      renderCheckText('neuteredCheck', animal.isNeutered);
+      
+      const microchipVal = document.getElementById('microchipVal');
+      if (animal.microchipId) {
+        microchipVal.innerText = animal.microchipId;
+        microchipVal.className = 'info-value raw';
+      } else {
+        microchipVal.className = 'status-check no';
+        microchipVal.innerHTML = '<i data-lucide="x"></i> Not microchipped';
+      }
 
-      // Shelter Info
+      // Section 4: Vaccinations list
+      const vaccsList = document.getElementById('vaccinationsList');
+      if (animal.vaccinations && animal.vaccinations.length > 0) {
+        vaccsList.innerHTML = animal.vaccinations.map(v => `
+          <div class="bullet-item">
+            <div class="bullet-bullet"></div>
+            <div>
+              <div class="bullet-text" style="font-weight: 600; color: var(--text-primary);">${v.title}</div>
+              <div class="bullet-date">${formatDate(v.date)}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        vaccsList.innerHTML = '<span class="empty-text">No vaccination records on file.</span>';
+      }
+
+      // Section 5: Behaviour notes
+      const behNotes = document.getElementById('behaviourNotes');
+      if (animal.behaviourNotes) {
+        behNotes.innerText = animal.behaviourNotes;
+        behNotes.className = 'bio-text';
+      } else {
+        behNotes.innerText = 'No behaviour notes recorded.';
+        behNotes.className = 'empty-text';
+      }
+
+      // Section 6: Care Requirements
+      const careReqs = [];
+      if (animal.specialNeeds) careReqs.push(`Special Needs: ${animal.specialNeeds}`);
+      if (animal.dietaryRequirements) careReqs.push(`Dietary: ${animal.dietaryRequirements}`);
+      
+      const careEl = document.getElementById('careRequirements');
+      if (careReqs.length > 0) {
+        careEl.innerHTML = careReqs.map(r => `<div class="bullet-item"><div class="bullet-bullet"></div><span class="bullet-text">${r}</span></div>`).join('');
+        careEl.className = 'bullet-list';
+      } else {
+        careEl.innerText = 'No special care needs noted.';
+        careEl.className = 'empty-text';
+      }
+
+      // Section 7: AI Summary
+      const aiBioText = animal.aiSummary || animal.aiAdoptionSummary || animal.adoptionDescription;
+      const aiCard = document.getElementById('aiSummarySection');
+      if (aiBioText) {
+        document.getElementById('aiSummaryBio').innerText = aiBioText;
+        aiCard.style.display = 'block';
+      } else {
+        aiCard.style.display = 'none';
+      }
+
+      // Shelter Info & Buttons
       if (animal.shelterName) {
         document.getElementById('shelterName').innerText = animal.shelterName;
       }
-
-      // Action Buttons
+      
       const emailSubject = encodeURIComponent(`Adoption Application for ${animal.name || 'Rescue Animal'}`);
       const emailBody = encodeURIComponent(`Hello,\n\nI would like to apply to adopt ${animal.name || 'this animal'} (Case ID: ${animal.caseId || 'N/A'}). Please let me know the next steps.\n\nThank you!`);
       const contactEmail = animal.shelterEmail || 'adopt@petvue.app';
       document.getElementById('adoptBtn').href = `mailto:${contactEmail}?subject=${emailSubject}&body=${emailBody}`;
 
+      const callBtn = document.getElementById('callBtn');
       if (animal.shelterPhone) {
-        document.getElementById('callBtn').href = `tel:${animal.shelterPhone}`;
-        document.getElementById('callBtn').style.display = 'flex';
+        callBtn.href = `tel:${animal.shelterPhone}`;
+        callBtn.style.display = 'flex';
       } else {
-        document.getElementById('callBtn').style.display = 'none';
+        callBtn.style.display = 'none';
       }
 
-      // Re-initialize dynamic Lucide icons
+      // Re-initialize dynamic icons
       lucide.createIcons();
     }
 
@@ -578,7 +712,6 @@
       document.getElementById('errorContainer').style.display = 'flex';
     }
 
-    // Load profile on window load
     window.onload = loadAnimalProfile;
   </script>
 </body>
