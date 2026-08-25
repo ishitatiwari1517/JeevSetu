@@ -239,8 +239,8 @@ const TodayScreen = ({ navigation }) => {
         <View style={styles.statsGrid}>
           <StatCard icon="paw"            value={stats.total}          label="Total Animals" color={COLORS.brand}     bg={COLORS.brandLight} />
           <StatCard icon="alert-circle"   value={stats.critical}       label="Critical"      color={COLORS.critical}  bg={COLORS.criticalBg} />
-          <StatCard icon="heart-check"    value={stats.available}      label="Available"     color={COLORS.healthy}   bg={COLORS.healthyBg} />
-          <StatCard icon="eye-alert"      value={stats.needsAttention} label="Need Attention" color={COLORS.attention} bg={COLORS.attentionBg} />
+          <StatCard icon="check-decagram" value={stats.available}      label="Available"     color={COLORS.healthy}   bg={COLORS.healthyBg} />
+          <StatCard icon="alert-outline"  value={stats.needsAttention} label="Need Attention" color={COLORS.attention} bg={COLORS.attentionBg} />
         </View>
 
         {/* ── Quick Actions ────────────────────────────────────────────────── */}
