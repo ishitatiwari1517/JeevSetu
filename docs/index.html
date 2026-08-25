@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet Your New Best Friend | PetVue Adoption</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --brand: #2b7a9e;
+      --brand-light: #e0f2fe;
+      --brand-gradient: linear-gradient(135deg, #2b7a9e 0%, #1d4ed8 100%);
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      
+      --critical: #ef4444;
+      --critical-bg: #fee2e2;
+      --attention: #f59e0b;
+      --attention-bg: #fef3c7;
+      --healthy: #10b981;
+      --healthy-bg: #d1fae5;
+      
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card Base */
+    .card {
+      background-color: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Photo Banner */
+    .photo-container {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .animal-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .photo-placeholder svg {
+      width: 64px;
+      height: 64px;
+      stroke-width: 1.5;
+    }
+
+    .health-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Profile Header Info */
+    .profile-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .animal-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .case-id {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background-color: #f1f5f9;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    /* Grid of Key Attributes */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .spec-card {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+    }
+
+    .spec-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .spec-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Biography Section */
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bio-card {
+      padding: 24px;
+    }
+
+    .bio-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* AI Generated Bio style */
+    .ai-bio-card {
+      background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 100%);
+      border: 1px solid #e9d5ff;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #c084fc;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* Medical Checklist */
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .check-row:last-child {
+      border-bottom: none;
+    }
+
+    .check-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .check-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    /* Call To Action Buttons */
+    .cta-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--brand-gradient);
+      color: white;
+      box-shadow: 0 4px 14px rgba(43, 122, 158, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(43, 122, 158, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--surface);
+      border: 1.5px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--brand-light);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px 0 40px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shelter-badge {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Error View */
+    .error-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      gap: 16px;
+    }
+
+    .error-container svg {
+      width: 64px;
+      height: 64px;
+      stroke: var(--critical);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="profileContainer">
+    <!-- Header/Banner Card -->
+    <div class="card">
+      <div class="photo-container">
+        <img id="animalPhoto" class="animal-photo" src="" alt="Rescue Animal" style="display: none;">
+        <div id="photoPlaceholder" class="photo-placeholder">
+          <i data-lucide="paw-print"></i>
+          <span style="font-size: 14px; font-weight: 500;">No Image Available</span>
+        </div>
+        <div id="healthBadge" class="health-badge">Stable</div>
+      </div>
+      
+      <div class="profile-info">
+        <div class="title-row">
+          <div>
+            <h1 id="animalName" class="animal-name">Rescue Animal</h1>
+            <span id="caseId" class="case-id">PV-XXXX-XXXX</span>
+          </div>
+        </div>
+
+        <div class="specs-grid">
+          <div class="spec-card">
+            <span class="spec-label">Species</span>
+            <span id="specSpecies" class="spec-value">-</span>
+          </div>
+          <div class="spec-card">
+            <span class="spec-label">Breed</span>
+            <span id="specBreed" class="spec-value">-</span>
+          </div>
+          <div class="spec-card">
+            <span class="spec-label">Age</span>
+            <span id="specAge" class="spec-value">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Description Card -->
+    <div class="card bio-card" id="bioCard">
+      <h2 class="section-title"><i data-lucide="book-open"></i> Portfolio Description</h2>
+      <p id="adoptionBio" class="bio-text">No bio description has been provided for this animal yet.</p>
+    </div>
+
+    <!-- Checklist Card -->
+    <div class="card">
+      <div class="check-row">
+        <div class="check-label">
+          <i data-lucide="gender"></i>
+          <span>Gender</span>
+        </div>
+        <span id="genderVal" style="font-weight: 600; text-transform: capitalize;">Unknown</span>
+      </div>
+      <div class="check-row">
+        <div class="check-label">
+          <i data-lucide="shield-check"></i>
+          <span>Vaccinated</span>
+        </div>
+        <div id="vaccinatedCheck" class="check-status"></div>
+      </div>
+      <div class="check-row">
+        <div class="check-label">
+          <i data-lucide="activity"></i>
+          <span>Neutered / Spayed</span>
+        </div>
+        <div id="neuteredCheck" class="check-status"></div>
+      </div>
+    </div>
+
+    <!-- Contact & Application Buttons -->
+    <div class="cta-container">
+      <a href="#" id="adoptBtn" class="btn btn-primary">
+        <i data-lucide="heart"></i> Apply for Adoption
+      </a>
+      <a href="#" id="callBtn" class="btn btn-secondary">
+        <i data-lucide="phone"></i> Contact Shelter
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <span class="shelter-badge" id="shelterName">PetVue Rescue Partner</span>
+      <span>Powered by PetVue Platform &copy; 2026</span>
+    </footer>
+  </div>
+
+  <!-- Error Container -->
+  <div class="container" id="errorContainer">
+    <div class="card error-container">
+      <i data-lucide="alert-triangle"></i>
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700;">Profile Not Found</h1>
+      <p style="color: var(--text-secondary); font-size: 14px;">The link is invalid or the animal's profile is not published for public view yet.</p>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Helper to extract query parameters
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Set colors for health states
+    const HEALTH_STATUS_STYLES = {
+      critical: { bg: '#fee2e2', text: '#ef4444' },
+      needs_attention: { bg: '#fef3c7', text: '#f59e0b' },
+      stable: { bg: '#e0f2fe', text: '#2b7a9e' },
+      healthy: { bg: '#d1fae5', text: '#10b981' }
+    };
+
+    function loadAnimalProfile() {
+      const base64Data = getQueryParam('data');
+      if (!base64Data) {
+        showError();
+        return;
+      }
+
+      try {
+        // Decode base64 to Unicode string
+        const jsonString = decodeURIComponent(atob(base64Data).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const animal = JSON.parse(jsonString);
+        renderProfile(animal);
+      } catch (err) {
+        console.error("Failed to parse animal profile:", err);
+        showError();
+      }
+    }
+
+    function renderProfile(animal) {
+      document.getElementById('profileContainer').style.display = 'flex';
+      document.getElementById('errorContainer').style.display = 'none';
+
+      // Basic Identity
+      document.getElementById('animalName').innerText = animal.name || 'Unnamed Animal';
+      document.getElementById('caseId').innerText = animal.caseId || 'PV-Unknown';
+      document.getElementById('specSpecies').innerText = animal.species ? animal.species.toUpperCase() : '-';
+      document.getElementById('specBreed').innerText = animal.breed || 'Mixed Breed';
+      document.getElementById('specAge').innerText = animal.age || animal.estimatedAge || 'Unknown';
+
+      // Health badge
+      const health = animal.healthStatus || 'stable';
+      const healthBadge = document.getElementById('healthBadge');
+      healthBadge.innerText = health.replace('_', ' ');
+      const style = HEALTH_STATUS_STYLES[health] || HEALTH_STATUS_STYLES.stable;
+      healthBadge.style.backgroundColor = style.bg;
+      healthBadge.style.color = style.text;
+
+      // Photo
+      const photoImg = document.getElementById('animalPhoto');
+      const placeholder = document.getElementById('photoPlaceholder');
+      if (animal.photoUrl && (animal.photoUrl.startsWith('http://') || animal.photoUrl.startsWith('https://'))) {
+        photoImg.src = animal.photoUrl;
+        photoImg.style.display = 'block';
+        placeholder.style.display = 'none';
+      } else {
+        photoImg.style.display = 'none';
+        placeholder.style.display = 'flex';
+      }
+
+      // Bio / Portfolio Description
+      const bioText = animal.aiSummary || animal.aiAdoptionSummary || animal.description || animal.adoptionDescription;
+      const bioCard = document.getElementById('bioCard');
+      if (bioText) {
+        document.getElementById('adoptionBio').innerText = bioText;
+        // If it's an AI summary, style it with a nice background
+        if (animal.aiSummary || animal.aiAdoptionSummary) {
+          bioCard.className = "card bio-card ai-bio-card";
+          // Add AI badge dynamically if not already there
+          if (!bioCard.querySelector('.ai-badge')) {
+            const aiBadge = document.createElement('div');
+            aiBadge.className = 'ai-badge';
+            aiBadge.innerHTML = '<i data-lucide="sparkles" style="width: 10px; height: 10px; margin-right: 4px;"></i> AI Bio';
+            bioCard.insertBefore(aiBadge, bioCard.firstChild);
+            lucide.createIcons();
+          }
+        }
+      }
+
+      // Gender
+      document.getElementById('genderVal').innerText = animal.gender || 'Unknown';
+
+      // Checklists (Neutered, Vaccinated)
+      const renderCheck = (elementId, isTrue) => {
+        const el = document.getElementById(elementId);
+        if (isTrue) {
+          el.style.backgroundColor = '#d1fae5';
+          el.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px; stroke: #10b981; stroke-width: 3;"></i>';
+        } else {
+          el.style.backgroundColor = '#fee2e2';
+          el.innerHTML = '<i data-lucide="x" style="width: 16px; height: 16px; stroke: #ef4444; stroke-width: 3;"></i>';
+        }
+      };
+      renderCheck('vaccinatedCheck', animal.isVaccinated);
+      renderCheck('neuteredCheck', animal.isNeutered);
+
+      // Shelter Info
+      if (animal.shelterName) {
+        document.getElementById('shelterName').innerText = animal.shelterName;
+      }
+
+      // Action Buttons
+      const emailSubject = encodeURIComponent(`Adoption Application for ${animal.name || 'Rescue Animal'}`);
+      const emailBody = encodeURIComponent(`Hello,\n\nI would like to apply to adopt ${animal.name || 'this animal'} (Case ID: ${animal.caseId || 'N/A'}). Please let me know the next steps.\n\nThank you!`);
+      const contactEmail = animal.shelterEmail || 'adopt@petvue.app';
+      document.getElementById('adoptBtn').href = `mailto:${contactEmail}?subject=${emailSubject}&body=${emailBody}`;
+
+      if (animal.shelterPhone) {
+        document.getElementById('callBtn').href = `tel:${animal.shelterPhone}`;
+        document.getElementById('callBtn').style.display = 'flex';
+      } else {
+        document.getElementById('callBtn').style.display = 'none';
+      }
+
+      // Re-initialize dynamic Lucide icons
+      lucide.createIcons();
+    }
+
+    function showError() {
+      document.getElementById('profileContainer').style.display = 'none';
+      document.getElementById('errorContainer').style.display = 'flex';
+    }
+
+    // Load profile on window load
+    window.onload = loadAnimalProfile;
+  </script>
+</body>
+</html>

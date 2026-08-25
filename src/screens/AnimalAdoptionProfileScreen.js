@@ -238,7 +238,7 @@ const AiSummarySection = ({ animal, onSummaryUpdated }) => {
 
 // ── QR Code & Share section ─────────────────────────────────────────────────────
 const QrSection = ({ animal, org, onAnimalUpdated }) => {
-  const profileUrl = getPublicProfileUrl(animal.id);
+  const profileUrl = getPublicProfileUrl(animal, org);
   const isPublic = animal.publicProfileEnabled !== false; // default true
 
   const handleShare = async () => {

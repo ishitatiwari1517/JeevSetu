@@ -26,7 +26,6 @@ import VolunteerDetailScreen     from '../screens/VolunteerDetailScreen';
 // Adoption tab (new 4th tab)
 import AdoptionShowcaseScreen       from '../screens/AdoptionShowcaseScreen';
 import AnimalAdoptionProfileScreen  from '../screens/AnimalAdoptionProfileScreen';
-import QRScannerScreen              from '../screens/QRScannerScreen';
 
 // ── Stack navigators ──────────────────────────────────────────────────────────
 const Tab           = createBottomTabNavigator();
@@ -46,7 +45,6 @@ const TodayStackNavigator = () => (
     <TodayStack.Screen name="AddMedicalRecord"       component={AddMedicalRecordScreen} />
     <TodayStack.Screen name="MedicationSchedule"     component={MedicationScheduleScreen} />
     <TodayStack.Screen name="AnimalAdoptionProfile"  component={AnimalAdoptionProfileScreen} />
-    <TodayStack.Screen name="QRScanner"              component={QRScannerScreen} />
   </TodayStack.Navigator>
 );
 
@@ -62,7 +60,6 @@ const AnimalsStackNavigator = () => (
     <AnimalsStack.Screen name="ScanProcessing"       component={ScanProcessingScreen} />
     <AnimalsStack.Screen name="ScanResult"           component={ScanResultScreen} />
     <AnimalsStack.Screen name="AnimalAdoptionProfile" component={AnimalAdoptionProfileScreen} />
-    <AnimalsStack.Screen name="QRScanner"            component={QRScannerScreen} />
   </AnimalsStack.Navigator>
 );
 
@@ -85,7 +82,6 @@ const AdoptionStackNavigator = () => (
   <AdoptionStack.Navigator screenOptions={{ headerShown: false }}>
     <AdoptionStack.Screen name="AdoptionShowcase"      component={AdoptionShowcaseScreen} />
     <AdoptionStack.Screen name="AnimalAdoptionProfile" component={AnimalAdoptionProfileScreen} />
-    <AdoptionStack.Screen name="QRScanner"             component={QRScannerScreen} />
   </AdoptionStack.Navigator>
 );
 

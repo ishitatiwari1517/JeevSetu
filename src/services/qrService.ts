@@ -7,28 +7,61 @@ import { Animal } from '../models/Animal';
 import { Organization } from '../models/Organization';
 import { updateAnimal } from './animalService';
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-// Deep link scheme registered in ios/PetApp/Info.plist.
-// Scanning the QR opens the app directly to the animal's adoption profile.
-// Format: petvue://animal/{animalId}
-const DEEP_LINK_BASE = 'petvue://animal';
-
-// ── URL helpers ───────────────────────────────────────────────────────────────
+const b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+const encodeBase64 = (str: string): string => {
+  const utf8 = unescape(encodeURIComponent(str));
+  let result = '';
+  let i = 0;
+  while (i < utf8.length) {
+    const c1 = utf8.charCodeAt(i++);
+    const c2 = i < utf8.length ? utf8.charCodeAt(i++) : NaN;
+    const c3 = i < utf8.length ? utf8.charCodeAt(i++) : NaN;
+    
+    const byte1 = c1 >> 2;
+    const byte2 = ((c1 & 3) << 4) | (isNaN(c2) ? 0 : c2 >> 4);
+    const byte3 = isNaN(c2) ? 64 : ((c2 & 15) << 2) | (isNaN(c3) ? 0 : c3 >> 6);
+    const byte4 = isNaN(c3) ? 64 : c3 & 63;
+    
+    result += b64chars.charAt(byte1) + b64chars.charAt(byte2) +
+              (byte3 === 64 ? '=' : b64chars.charAt(byte3)) +
+              (byte4 === 64 ? '=' : b64chars.charAt(byte4));
+  }
+  return result;
+};
 
 /**
- * Deep link URL encoded in the QR code.
- * Scanning this with iPhone Camera app opens PetVue straight to the animal profile.
- * Uses animal.id (not caseId) so it never breaks even if caseId changes.
+ * Public profile URL hosted on GitHub Pages.
+ * The QR code encodes this URL with the animal's profile data base64-encoded,
+ * allowing anyone scanning it with their native phone camera to instantly view
+ * the animal's photo, AI bio, health card, and apply to adopt in their browser.
  */
-export const getPublicProfileUrl = (animalId: string): string =>
-  `${DEEP_LINK_BASE}/${animalId}`;
+export const getPublicProfileUrl = (animal: Animal, org?: Organization | null): string => {
+  const data = {
+    id: animal.id,
+    caseId: animal.caseId,
+    name: animal.name,
+    species: animal.species,
+    breed: animal.breed,
+    estimatedAge: animal.estimatedAge,
+    gender: animal.gender,
+    isNeutered: animal.isNeutered,
+    isVaccinated: animal.isVaccinated,
+    healthStatus: animal.healthStatus,
+    adoptionDescription: animal.adoptionDescription,
+    aiAdoptionSummary: animal.aiAdoptionSummary,
+    photoUrl: animal.primaryPhotoUri || animal.photoUrl,
+    shelterName: org?.name || 'PetVue Shelter Partner',
+    shelterEmail: org?.contactEmail || 'adopt@petvue.app',
+    shelterPhone: org?.contactPhone || ''
+  };
 
+  const payload = encodeBase64(JSON.stringify(data));
+  return `https://ishitatiwari1517.github.io/PetVue-app/?data=${payload}`;
+};
 
 /**
  * Human-readable slug shown below the QR code.
- * We show the caseId (e.g. "PV-2024-0391") as a friendly label —
- * but the actual URL still uses the internal id.
+ * We show the caseId (e.g. "PV-2024-0391") as a friendly label.
  */
 export const getProfileSlug = (animal: Animal): string =>
   animal.publicProfileSlug || animal.caseId || animal.id;
@@ -46,7 +79,7 @@ export const getShareMessage = (animal: Animal, org?: Organization | null): stri
   const species = capitalize(animal.species);
   const breed   = animal.breed ? `${animal.breed} · ` : '';
   const shelter = org?.name || 'Animal Shelter';
-  const url     = getPublicProfileUrl(animal.id);
+  const url     = getPublicProfileUrl(animal, org);
 
   return (
     `🐾 Meet ${name}!\n` +
@@ -72,7 +105,7 @@ export const getPrintHtml = (
   const breed   = animal.breed || '';
   const shelter = org?.name || 'Animal Shelter';
   const phone   = org?.contactPhone || '';
-  const url     = getPublicProfileUrl(animal.id);
+  const url     = getPublicProfileUrl(animal, org);
   const date    = new Date().toLocaleDateString('en-IN', {
     day: 'numeric', month: 'long', year: 'numeric',
   });
