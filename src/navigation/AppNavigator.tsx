@@ -22,6 +22,7 @@ import PeopleHomeScreen          from '../screens/PeopleHomeScreen';
 import VolunteerListScreen       from '../screens/VolunteerListScreen';
 import AddVolunteerScreen        from '../screens/AddVolunteerScreen';
 import VolunteerDetailScreen     from '../screens/VolunteerDetailScreen';
+import AssignTaskScreen          from '../screens/AssignTaskScreen';
 
 // Adoption tab (new 4th tab)
 import AdoptionShowcaseScreen       from '../screens/AdoptionShowcaseScreen';
@@ -82,6 +83,7 @@ const PeopleStackNavigator = () => (
     <PeopleStack.Screen name="VolunteerList"      component={VolunteerListScreen} />
     <PeopleStack.Screen name="AddVolunteer"       component={AddVolunteerScreen} />
     <PeopleStack.Screen name="VolunteerDetail"    component={VolunteerDetailScreen} />
+    <PeopleStack.Screen name="AssignTask"         component={AssignTaskScreen} />
     <PeopleStack.Screen name="MedicationSchedule" component={MedicationScheduleScreen} />
     <PeopleStack.Screen name="AnimalDetail"       component={AnimalDetailScreen} />
     <PeopleStack.Screen name="AddMedicalRecord"   component={AddMedicalRecordScreen} />

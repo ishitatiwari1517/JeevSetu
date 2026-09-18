@@ -97,7 +97,7 @@ const SignUpScreen = ({ onSignInPress, onPhonePress, onSignUpSuccess }) => {
           <View style={styles.logoContainer}>
             <Icon name="paw" size={32} color={COLORS.white} />
           </View>
-          <Text style={styles.brandName}>PetVue</Text>
+          <Text style={styles.brandName}>JeevSetu</Text>
           <Text style={styles.brandSubtitle}>Create your account</Text>
         </View>
 
@@ -105,14 +105,14 @@ const SignUpScreen = ({ onSignInPress, onPhonePress, onSignUpSuccess }) => {
         <View style={styles.formCard}>
           <CustomInput 
             label="Full Name" 
-            placeholder="Pet Guardian Name" 
+            placeholder="Guardian / Owner Name" 
             iconName="user"
             value={fullName}
             onChangeText={setFullName}
           />
           <CustomInput 
             label="Email Address" 
-            placeholder="guardian@petvue.com" 
+            placeholder="guardian@jeevsetu.com" 
             iconName="at-sign"
             value={email}
             onChangeText={setEmail}

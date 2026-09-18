@@ -56,7 +56,7 @@ const ScanResultScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.popToTop()} style={styles.headerBtn}>
           <Icon name="arrow-left" size={22} color={COLORS.white} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>PetVue</Text>
+        <Text style={styles.headerTitle}>JeevSetu</Text>
         <View style={styles.headerBtn} />
       </View>
 

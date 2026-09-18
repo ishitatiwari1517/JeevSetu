@@ -606,7 +606,7 @@ const AnimalAdoptionProfileScreen = ({ route, navigation }) => {
         <View style={styles.footer}>
           <Icon name="heart-circle" size={28} color={COLORS.brand} />
           <Text style={styles.footerText}>
-            Profile by {org?.name || 'Animal Shelter'} · PetVue
+            Profile by {org?.name || 'Animal Shelter'} · JeevSetu
           </Text>
           {org?.contactPhone && (
             <Text style={styles.footerContact}>📞 {org.contactPhone}</Text>

@@ -3,7 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
-  TextInput, StatusBar, RefreshControl,
+  TextInput, StatusBar, RefreshControl, Linking, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -24,6 +24,27 @@ const SKILL_LABELS = {
   cattle_handling: 'Cattle',
   admin: 'Admin',
   social_media: 'Social Media',
+};
+
+const sendQuickWhatsApp = async (vol) => {
+  if (!vol?.phone) { Alert.alert('No Phone', 'No phone number saved for this volunteer.'); return; }
+  const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  const message =
+    `🌿 *JeevSetu Duty Reminder*\n` +
+    `Hello ${vol.name.split(' ')[0]}! Today is *${today}*.\n\n` +
+    `Please check your JeevSetu duty list for today's assigned tasks.\n` +
+    `Thank you for serving animal life! 🙏`;
+  const digits = vol.phone.replace(/\D/g, '');
+  const phone = digits.startsWith('91') && digits.length === 12 ? digits : digits.length === 10 ? `91${digits}` : digits;
+  try {
+    await Linking.openURL(`whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`);
+  } catch {
+    try {
+      await Linking.openURL(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+    } catch {
+      Alert.alert('WhatsApp not found', 'Please install WhatsApp to use this feature.');
+    }
+  }
 };
 
 const VolunteerCard = ({ vol, onPress }) => (
@@ -54,6 +75,14 @@ const VolunteerCard = ({ vol, onPress }) => (
         ))}
       </View>
     </View>
+    <TouchableOpacity
+      style={styles.waBtn}
+      onPress={(e) => { e.stopPropagation(); sendQuickWhatsApp(vol); }}
+      activeOpacity={0.75}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+    >
+      <Icon name="whatsapp" size={20} color="#25D366" />
+    </TouchableOpacity>
     <Icon name="chevron-right" size={18} color={COLORS.textMuted} />
   </TouchableOpacity>
 );
@@ -166,6 +195,7 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', paddingTop: 60, gap: SPACING.sm },
   emptyTitle: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
   emptySub: { fontSize: 13, color: COLORS.textSecondary, textAlign: 'center', paddingHorizontal: SPACING.xl },
+  waBtn: { padding: 6, marginRight: 4 },
 });
 
 export default VolunteerListScreen;

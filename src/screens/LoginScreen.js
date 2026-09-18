@@ -96,7 +96,7 @@ const LoginScreen = ({
               <Icon name="paw" size={16} color={COLORS.white} />
             </View>
           </View>
-          <Text style={styles.brandName}>PetVue</Text>
+          <Text style={styles.brandName}>JeevSetu</Text>
           <View style={styles.brandUnderline} />
         </View>
 

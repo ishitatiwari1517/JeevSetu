@@ -75,7 +75,7 @@ const BookScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation?.goBack()}>
           <Icon name="arrow-left" size={24} color={COLORS.brandGreen} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>PetVue</Text>
+        <Text style={styles.headerTitle}>JeevSetu</Text>
         <TouchableOpacity>
           <Icon name="cart-outline" size={24} color={COLORS.brandGreen} />
         </TouchableOpacity>

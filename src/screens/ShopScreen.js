@@ -54,7 +54,7 @@ const ShopScreen = () => {
       
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>PetVue Shop</Text>
+          <Text style={styles.headerTitle}>JeevSetu Shop</Text>
           <Text style={styles.headerSubtitle}>Premium essentials for Bruno</Text>
         </View>
         <TouchableOpacity style={styles.cartBtn}>

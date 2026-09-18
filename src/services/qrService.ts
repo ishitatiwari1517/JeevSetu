@@ -71,8 +71,8 @@ export const getPublicProfileUrl = (
     })),
 
     // Shelter info
-    shelterName: org?.name || 'PetVue Shelter Partner',
-    shelterEmail: org?.contactEmail || 'adopt@petvue.app',
+    shelterName: org?.name || 'JeevSetu Partner',
+    shelterEmail: org?.contactEmail || 'care@jeevsetu.app',
     shelterPhone: org?.contactPhone || ''
   };
 
@@ -158,7 +158,7 @@ export const getPrintHtml = (
 <body>
   <div class="header">
     <div class="shelter-name">${shelter}</div>
-    <div class="powered">Powered by PetVue · ${date}</div>
+    <div class="powered">Powered by JeevSetu · ${date}</div>
   </div>
 
   <div class="animal-name">${name}</div>

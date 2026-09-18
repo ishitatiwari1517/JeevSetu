@@ -4,7 +4,7 @@
 import React, { useCallback, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  StatusBar, Alert, RefreshControl,
+  StatusBar, Alert, RefreshControl, Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -94,6 +94,48 @@ const VolunteerDetailScreen = ({ route, navigation }) => {
   }, [volunteerId]);
 
   useFocusEffect(useCallback(() => { loadData(); }, [loadData]));
+
+  // ── WhatsApp Briefing ────────────────────────────────────────────────────
+  const buildWhatsAppBriefing = (vol, todayTasks) => {
+    const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+    const taskLines = todayTasks.length > 0
+      ? todayTasks.map((t, i) => {
+          const animal = t.animalName ? ` (${t.animalName}${t.animalCaseId ? ' · ' + t.animalCaseId : ''})` : '';
+          const priority = t.priority === 'urgent' ? ' 🔴' : t.priority === 'high' ? ' 🟠' : '';
+          return `${i + 1}. ${t.title}${animal}${priority}`;
+        }).join('\n')
+      : '  No tasks assigned for today.';
+
+    return (
+      `🌿 *JeevSetu Daily Duty Briefing*\n` +
+      `Hello ${vol.name.split(' ')[0]}! Here is your duty schedule for *${today}*:\n\n` +
+      `📋 *Your Tasks:*\n` +
+      `${taskLines}\n\n` +
+      `Please update task status in JeevSetu after completing each duty.\n` +
+      `Thank you for serving animal life today! 🙏`
+    );
+  };
+
+  const sendWhatsAppBriefing = async () => {
+    if (!volunteer?.phone) {
+      Alert.alert('No Phone', 'This volunteer does not have a phone number saved.');
+      return;
+    }
+    const todayTasks = tasks.filter(t => t.status === 'pending' || t.status === 'in_progress');
+    const message = buildWhatsAppBriefing(volunteer, todayTasks);
+    const digits = volunteer.phone.replace(/\D/g, '');
+    const phone = digits.startsWith('91') && digits.length === 12 ? digits : digits.length === 10 ? `91${digits}` : digits;
+    // Try native WhatsApp first, fall back to wa.me web link
+    try {
+      await Linking.openURL(`whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`);
+    } catch {
+      try {
+        await Linking.openURL(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+      } catch (e) {
+        Alert.alert('WhatsApp not found', 'Please install WhatsApp to use this feature.');
+      }
+    }
+  };
 
   const toggleStatus = async () => {
     if (!volunteer) return;
@@ -251,6 +293,26 @@ const VolunteerDetailScreen = ({ route, navigation }) => {
 
         {activeTab === 'Tasks' && (
           <>
+            {/* Action Buttons Row */}
+            <View style={styles.taskActionRow}>
+              <TouchableOpacity
+                style={styles.assignBtn}
+                onPress={() => navigation.navigate('AssignTask', { volunteerId: volunteer.id, volunteerName: volunteer.name })}
+                activeOpacity={0.82}
+              >
+                <Icon name="plus-circle-outline" size={18} color="#fff" />
+                <Text style={styles.assignBtnText}>Assign Task</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.whatsappBtn}
+                onPress={sendWhatsAppBriefing}
+                activeOpacity={0.82}
+              >
+                <Icon name="whatsapp" size={18} color="#fff" />
+                <Text style={styles.whatsappBtnText}>WhatsApp Briefing</Text>
+              </TouchableOpacity>
+            </View>
+
             {tasks.length === 0 ? (
               <View style={styles.emptyState}>
                 <Icon name="clipboard-check-outline" size={44} color={COLORS.border} />
@@ -336,6 +398,11 @@ const styles = StyleSheet.create({
   emptyState: { alignItems: 'center', paddingTop: 60, gap: SPACING.sm },
   emptyTitle: { fontSize: 15, fontWeight: '700', color: COLORS.textPrimary },
   emptySub:   { fontSize: 13, color: COLORS.textSecondary, textAlign: 'center', paddingHorizontal: SPACING.xl },
+  taskActionRow:   { flexDirection: 'row', gap: SPACING.sm },
+  assignBtn:       { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: COLORS.brand, borderRadius: RADIUS.lg, paddingVertical: 12, ...SHADOW.card },
+  assignBtnText:   { color: '#fff', fontWeight: '800', fontSize: 13 },
+  whatsappBtn:     { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: '#25D366', borderRadius: RADIUS.lg, paddingVertical: 12, ...SHADOW.card },
+  whatsappBtnText: { color: '#fff', fontWeight: '800', fontSize: 13 },
 });
 
 export default VolunteerDetailScreen;

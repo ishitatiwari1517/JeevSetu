@@ -121,7 +121,7 @@ const ProfileScreen = ({ navigation }) => {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>PetVue</Text>
+        <Text style={styles.headerTitle}>JeevSetu</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('PetForm', { petId: pet.id })}
           style={styles.headerBtn}>
