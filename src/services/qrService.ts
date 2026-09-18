@@ -77,7 +77,7 @@ export const getPublicProfileUrl = (
   };
 
   const payload = encodeBase64(JSON.stringify(data));
-  return `https://ishitatiwari1517.github.io/PetVue-adopt/?data=${payload}`;
+  return `https://ishitatiwari1517.github.io/JeevSetu-02/?data=${payload}`;
 };
 
 /**
